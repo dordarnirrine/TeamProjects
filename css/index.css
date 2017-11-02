@@ -85,3 +85,41 @@ html, body {
     box-shadow: 0px 0px 4px #CCCCCC;
     border-radius: 0px 5px 5px 0px;
 }
+
+#content-login {
+
+    width: 50%;
+    height: 30%;
+
+    margin-left: 20%;
+    margin-top: 20%;
+}
+
+#content-login-form {
+    padding-left: 30%;
+}
+
+.form-text {
+    float: left;
+
+    font-size: 18pt;
+}
+
+.form-input {
+    width: 180px;
+    height: 20px;
+
+    float: right;
+    margin-right: 5%;
+    margin-top: 5px;
+
+    border-radius: 5px 5px 5px 5px;
+    border-color: white;
+}
+
+.form-button {
+    width: 150px;
+    height: 30px;
+
+    margin-left: 30%;
+}
