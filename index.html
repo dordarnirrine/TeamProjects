@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script src="js/INSERT_FILE_NAME.js"> </script>
+        <script src="js/index.js"> </script>
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
@@ -20,9 +20,9 @@
             <div id="sidebar-buttons">
                 <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
                 <hr>
-                <button type="button" class="sidebar-button" style="margin-top: 4px"> Testing </button>
+                <!--<button type="button" class="sidebar-button" style="margin-top: 4px"> Testing </button>
                 <button type="button" class="sidebar-button"> Further Testing</button>
-                <button type="button" class="sidebar-button"> Button</button>
+                <button type="button" class="sidebar-button"> Button</button>-->
             </div>
 
             <div id="sidebar-footer">
@@ -39,11 +39,12 @@
 
                 <div id="content-login">
                     <form id="content-login-form">
-                        <span class="form-text"> Username: </span> <input class="form-input" type="text" name="user"> <br> <br>
-                        <span class="form-text"> Password: </span> <input class="form-input" type="password" name="pass"> <br> <br>
+                        <span class="form-text"> Username: </span> <input id="form-login" class="form-input" type="text" name="user"> <br> <br>
+                        <span class="form-text"> Password: </span> <input id="form-pass" class="form-input" type="password" name="pass"> <br> <br>
 
-                        <button class="form-button" type="button"> Login </button>
+                        <button class="form-button" onclick="choosePage();" type="button"> Login </button>
                     </form>
+                    <span class="form-failed" style="color: red;"> Test</span>
                 </div>
 
             </div>

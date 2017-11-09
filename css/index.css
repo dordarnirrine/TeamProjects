@@ -123,3 +123,20 @@ html, body {
 
     margin-left: 30%;
 }
+
+#content-view {
+
+    width: 50%;
+    height: 30%;
+
+    margin-left: 5%;
+    margin-top: 7%;
+}
+#content-tick {
+
+    width: 50%;
+    height: 30%;
+
+    margin-left: 5%;
+    margin-top: 7%;
+}
