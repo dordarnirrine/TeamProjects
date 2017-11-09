@@ -11,15 +11,20 @@ function choosePage(){
             document.location.href = "analyst.html";
             break;
         case "specialist":
+            document.location.href = "Spec.html";
+            break;
+        case "help desk":
+            document.location.href = "Opp.html";
             break;
         default:
             loginFailed(true);
     }
 }
 
+var text = document.getElementsByClassName("form-failed");
 function loginFailed(b){
-    var text = document.getElementsByClassName("form-failed");
-    console.log(text[0].value);
+    
+    console.log(text.value);
     if (b) {
         text.value = "Login Failed! Wrong Username / Password";
     }
