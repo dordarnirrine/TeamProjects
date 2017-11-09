@@ -15,6 +15,10 @@
                width: 100%;
             }
 
+            p{
+                margin-left: 5px;
+            }
+
             td, th {
                 border: 1px solid #dddddd;
                 text-align: left;
@@ -26,9 +30,7 @@
             }
 
             select {
-                margin:50px;
-                height:300px;
-                width:250px;
+                margin:10px;
             }
 
             option{
@@ -61,8 +63,8 @@
             }
 
             #Backlog{
-                height:240px;
-                width:400px;
+                height:400px;
+                width:850px;
                 margin:10px;
                 margin-left:15px;
                 padding:3px;
@@ -73,49 +75,7 @@
                 float:left;
             }
 
-            #TimeToSolution{
-                height:240px;
-                width:400px;
-                margin:10px;
-                margin-left:15px;
-                padding:3px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            #NumOfProbs4EquipSoft{
-                height:240px;
-                width:400px;
-                margin:10px;
-                margin-left:15px;
-                padding:3px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            #NumofProbs4Spec{
-                height:240px;
-                width:400px;
-                margin:10px;
-                margin-left:15px;
-                padding:3px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            li{
-                margin:5px;
-                margin-left:30px;
-            }
+        
 
         </style>
     
@@ -158,29 +118,24 @@
                     <hr style="color: #EEEEEE; border-width: 2px">
                 </div>
 
+                <p> Choose What Data you Wish to View: 
+                <select>
+                    <option>View "Backlog" Data</option>
+                    <option>View "Time to Solution Individuals" Data</option>
+                    <option>View "Problems with Software" Data</option>
+                    <option>View "Problems with Equipment" Data</option>
+                    <option>View "Problems Set to Specialists" Data</option>
+                </select>
+
+
                <div id ="Backlog">
                     <h4><u>Backlog</u></h4>
-                    Total Backlog: <strong>532</strong>
-                    <canvas id="backlog-chart" ></canvas>
+                    <p>Total Backlog: <strong>532</strong></p>
+                    <p>Average Backlog: <strong>445</strong></p>
+                    <canvas id="line-chart" height=90></canvas>
                </div>
 
-               <div id ="TimeToSolution">
-                    <h4><u>Specialist, Time To Find Solution</u></h4>
-                    The specialist with the highest time to find solutions
-                    <canvas id="time2Sol-chart" ></canvas>
-               </div>
 
-               <div id ="NumofProbs4Spec">
-                    <h4><u>Highest Number Of Problems Set</u></h4>
-                    The specialist with the largest number of problems
-                    <canvas id="NumOfProbs-chart" ></canvas>
-               </div>
-
-               <div id="NumOfProbs4EquipSoft">
-                    <h4><u>Highest Number Of Problems</u></h4>
-                    The equipment with the largest number of issues
-                    <canvas id="equipProb-chart" ></canvas>
-               </div>
             </div>
         </div>
 
@@ -188,93 +143,31 @@
 
          <script src="Chart.min.js"></script>
 
-         <script>/*
-            new Chart(document.getElementById("backlog-chart"), {
-                type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
-                    datasets: [{ 
-                        data: [12,10,8,6,6,1,5,9,8,7],
-                        label: "Angel Wallace",
-                        borderColor: "#3e95cd",
-                        fill: false
-   
-                    }
-                    ]           
-                },
-                        options: {
-                            title: {
-                            display: true,
-                            text: 'Number Of Current Problems / Time'
-                        }
-                    }
-                });
-
-
-            new Chart(document.getElementById("time2Sol-chart"), {
-                type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
-                    datasets: [{ 
-                        data: [12,10,8,6,6,1,5,9,8,7],
-                        label: "Angel Wallace",
-                        borderColor: "#3e95cd",
-                        fill: false
-   
-                    }
-                    ]           
-                },
-                        options: {
-                            title: {
-                            display: true,
-                            text: 'Number Of Current Problems / Time'
-                        }
-                    }
-                });
-
-                new Chart(document.getElementById("NumOfProbs-chart"), {
-                type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
-                    datasets: [{ 
-                        data: [12,10,8,6,6,1,5,9,8,7],
-                        label: "Angel Wallace",
-                        borderColor: "#3e95cd",
-                        fill: false
-   
-                    }
-                    ]           
-                },
-                        options: {
-                            title: {
-                            display: true,
-                            text: 'Number Of Current Problems / Time'
-                        }
-                    }
-                });
-
-                new Chart(document.getElementById("equipProb-chart"), {
-                type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
-                    datasets: [{ 
-                        data: [12,10,8,6,6,1,5,9,8,7],
-                        label: "Angel Wallace",
-                        borderColor: "#3e95cd",
-                        fill: false
-   
-                    }
-                    ]           
-                },
-                        options: {
-                            title: {
-                            display: true,
-                            text: 'Number Of Current Problems / Time'
-                        }
-                    }
-                });
-
-        */
+         <script>
+         new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: [1,2,3,4,5,6,7,8,9,10],
+    datasets: [{ 
+        data: [540,550,590,600,580,530,490,390,440,532],
+        label: "Backlog",
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: [445,445,445,445,445,445,445,445,445,445],
+        label: "Average",
+        borderColor: "#8e5ea2",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'World population per region (in millions)'
+    }
+  }
+});
          </script>
     </body>
 </html> 
