@@ -1,0 +1,231 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/INSERT_FILE_NAME.js"> </script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            img {
+                width: 50%;
+                height: auto;
+            }
+            table {
+               font-family: arial, sans-serif;
+               border-collapse: collapse;
+               width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+               padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            option{
+                margin:5px;
+            }
+
+            select{
+                margin:10px;
+            }
+
+            #ChooseSpecPanel{
+                margin:10px;
+                margin-left:15px;
+                padding:3px;
+                height:450px;
+                width:350px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+
+            #SpecialistPanel{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:500px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            li{
+                margin:10px;
+                margin-left:30px;
+            }
+
+        </style>
+    
+      
+    </head>
+    
+
+
+
+
+    <body>
+        <div id="sidebar">
+            <div id="sidebar-logo">
+                <img src="img/logo.png">
+            </div>
+            
+            <div id="sidebar-buttons">
+                <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
+                <hr>
+                <a href="analyst.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> General </button></a>
+                <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
+                <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
+                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+            </div>
+
+            <div id="sidebar-footer">
+                <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-main">
+                
+                <div id="content-title">
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Specialist Analytics</h1>
+                    <hr style="color: #EEEEEE; border-width: 2px">
+                </div>
+
+
+                <div id="ChooseSpecPanel">
+                   <h4><u>Specialist</u></h4>
+                    <select id="specList">
+                        <option value="Angel Wallace">Angel Wallace </option>
+                        <option value="Irvin  Cruz">Irvin  Cruz</option>
+                        <option value="Grant  Santos">Grant  Santos</option>
+                        <option value="Faye   Sandoval">Faye Sandoval</option>
+                        <option value="Ora Rodgers">Ora Rodgers</option>
+                        <option value="Charlie Reeves">Charlie Reeves</option>
+                        <option value="Jenna Miles">Jenna Miles</option>
+                    </select>
+                    <ul id="SpecInfo">
+                        <li id="specName">Name: <strong>Angel Wallace</strong></li>
+                        <li id="specAge">Age: <strong>32</strong></li>
+                        <li id="specID">Staff ID: <strong>H2H5821</strong></li>
+                        <li id="specTime">Average Time To Find Solution: <strong>11 days, 12 Hours</strong></li>
+                        <li id="specNoProbs">Number of Current Problems: <strong>4</strong></li>
+                        <li id="specSols">Number of Solved Problems: <strong>42</strong></li>
+                        <li>Areas of Expertise:
+                            <ul>
+                                <li id="spec1"><strong>Printers</strong></li>
+                                <li id="spec2"><strong>Scanners</strong></li>
+                                </ul>
+                        </li>
+                    </ul>
+                    
+                </div>
+
+
+                <div id="SpecialistPanel">
+                    <h4><u>Specialist Analytics</u></h4>
+                    <select id="analyticsChoice">
+                        <option value="probs/time">Number Of Problems / Time</option>
+                        <option value="Time to find Solutions">Time To Find Solutions</option>
+                        <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
+                    </select>
+                    <canvas id="line-chart" ></canvas>
+                </div>
+
+
+                <div id="content-login">    
+                </div>
+
+            </div>
+        </div>
+
+        <script src="Chart.min.js"></script>
+
+        <script>
+            new Chart(document.getElementById("line-chart"), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10],
+                    datasets: [{ 
+                        data: [12,10,8,6,6,1,5,9,8,7],
+                        label: "Angel Wallace",
+                        borderColor: "#3e95cd",
+                        fill: false
+   
+                    }
+                    ]           
+                },
+                        options: {
+                            title: {
+                            display: true,
+                            text: 'Number Of Current Problems / Time'
+                        }
+                    }
+                });
+
+        </script>
+
+
+
+        <script type="text/javascript">
+
+
+            function specialistChosen(selectedSpec){
+                var angel = {
+                    name: "Angel Wallace",
+                    age: "32",
+                    staffID: "H2h25821",
+                    averageTime : "11 Days, 12 Hours",
+                    numOfSols : 42,
+                    areas : ["Printers", "Scanners"]
+                };
+
+                var irvin = {
+                    name: "Irvin Cruz",
+                    age: "26",
+                    staffID: "G48732947",
+                    averageTime : "18 Days, 20 Hours",
+                    numOfSols : 16,
+                    areas : ["Windows 10", "Windows Vista"]
+                };
+                
+                 if(selectedSpec.value == "Angel Wallace"){
+                   document.getElementById("specName").innerHTML.replace(*,"Name: <strong>Angel Wallace</strong>");
+                   document.getElementById("specAge").innerHTML.replace();
+                   document.getElementById("specID").innerHTML.replace();
+                   document.getElementById("specTime").innerHTML.replace();
+                   document.getElementById("specNoProbs").innerHTML.replace();
+                   document.getElementById("specNoSols").innerHTML.replace();
+                   document.getElementById("spec1").innerHTML.replace();
+                   document.getElementById("spec2").innerHTML.replace();
+
+                } else {
+                    document.getElementById("specName").innerHTML.replace(*,"Name: <strong>Irvin Cruz</strong>");
+                    /*
+                    document.getElementById("specAge").innerHTML.replace();
+                    document.getElementById("specID").innerHTML.replace();
+                    document.getElementById("specTime").innerHTML.replace();
+                    document.getElementById("specNoProbs").innerHTML.replace();
+                    document.getElementById("specNoSols").innerHTML.replace();
+                    document.getElementById("spec1").innerHTML.replace();
+                    document.getElementById("spec2").innerHTML.replace();
+                    */
+                    
+
+                }
+
+            }
+
+        </script>
+
+    </body>
+</html> 

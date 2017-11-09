@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/INSERT_FILE_NAME.js"> </script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            img {
+                width: 50%;
+                height: auto;
+            }
+            table {
+               font-family: arial, sans-serif;
+               border-collapse: collapse;
+               width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+               padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            select {
+                margin:10px;
+                
+            }
+
+            option{
+                margin:5px;
+            }
+
+            #ChooseEquip{
+               margin:10px;
+               margin-left:15px;
+                padding:3px;
+                height:450px;
+                width:350px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            #EquipmentAnalytics{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:500px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            li{
+                margin:10px;
+                margin-left:30px;
+            }
+        </style>
+    
+        <script type="text/javascript">
+
+            function equipmentChosen(){
+
+            }
+            
+        </script>
+
+    </head>
+
+
+
+    <body>
+        <div id="sidebar">
+            <div id="sidebar-logo">
+                <img src="img/logo.png">
+            </div>
+            
+            <div id="sidebar-buttons">
+                <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
+                <hr>
+                <a href="analyst.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> General </button></a>
+                <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
+                <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
+                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+            </div>
+
+            <div id="sidebar-footer">
+                <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-main">
+                
+                <div id="content-title">
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Equipment Analytics</h1>
+                    <hr style="color: #EEEEEE; border-width: 2px">
+                </div>
+
+              
+
+
+                <div id="ChooseEquip">
+                    <h4><u>Equipment</u></h4>
+                    
+                    <ul id="EquipInfo">
+                        <select >
+                        <option value="printer">HP Deskjet 3636</option>
+                        <option value="scanner">Fujitsu ScanSnap S1300i</option>
+                        <option value="desktop">HP 260-a104na</option>
+                        <option value="phone">Mitel 5324</option>
+                    
+                    </select>
+                        <li>Make: <strong>Mitel</strong></li>
+                        <li>Model: <strong>5324</strong></li>
+                        <li>Equipment Type: <strong>Phone</strong></li>
+                        <li>Number Of Current Problems: <strong>7</strong></li>
+                        <li>Total Number of Problems: <strong>15</strong></li>
+                    </ul>
+
+                </div>
+
+                <div id="EquipmentAnalytics">
+                    <h4><u>Specialist Analytics</u></h4>
+                    <select id="analyticsChoice">
+                        <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
+                        <option value="NoOfProbs">Number Of Problems / Time</option>
+                        <option value="Time to find Solutions">Time To Find Solutions</option>
+                        
+                    </select>
+                    <canvas id="bar-chart" ></canvas>
+                </div>
+
+                <script src="Chart.min.js"></script>
+                <script>
+                new Chart(document.getElementById("bar-chart"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["HP Deskjet", "Mitel 5324", "HP 260-a104na", "Fujitsu ScanSnap"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [150,300,60,12]
+                        }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                });
+
+        </script>
+
+
+                <div id="content-login">    
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html> 

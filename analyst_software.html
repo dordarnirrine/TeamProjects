@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/INSERT_FILE_NAME.js"> </script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            img {
+                width: 50%;
+                height: auto;
+            }
+            table {
+               font-family: arial, sans-serif;
+               border-collapse: collapse;
+               width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+               padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            select {
+                margin:10px;
+            }
+
+            option{
+                margin:5px;
+            }
+
+            #ChooseSoftPanel{
+               margin:10px;
+               margin-left:15px;
+                padding:3px;
+                height:450px;
+                width:350px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+             #SoftwarePanel{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:500px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            li{
+                margin:10px;
+                margin-left:30px;
+            }
+        </style>
+    
+        <script type="text/javascript">
+
+            function softwareChosen(){
+
+            }
+            
+        </script>
+
+
+    </head>
+
+
+
+    <body>
+        <div id="sidebar">
+            <div id="sidebar-logo">
+                <img src="img/logo.png">
+            </div>
+            
+            <div id="sidebar-buttons">
+                <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
+                <hr>
+                <a href="analyst.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> General </button></a>
+                <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
+                <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
+                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+            </div>
+
+            <div id="sidebar-footer">
+                <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-main">
+
+                
+                <div id="content-title">
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Software Analytics</h1>
+                    <hr style="color: #EEEEEE; border-width: 2px">
+                </div>
+
+                <div id="ChooseSoftPanel">
+                    <h4><u>Choose Software</u></h4>
+                    <select>
+                        <option value="windows10">Windows 10</option>
+                        <option value="windows9">Windows Vista</option>
+                        <option value="softwarev43">Mac OS X</option>
+                        <option value="other23">Ubuntu</option>
+                        <option value="other23">Word Processing</option>
+                        <option value="other23">Microsoft Excel</option>
+                    </select>
+                    <ul id="SoftInfo">
+                       <li>Name: <strong>Windows 10</strong></li>
+                       <li>Type of software: <strong>Operating System</strong></li>
+                       <li>Number of Staff Using: <strong>52</strong></li>
+                       <li>Number of Current Problems <strong>3</strong></li>
+                       <li>Total Number Of Problems: <strong>22</strong></li>
+                    </ul>
+                </div>
+                
+
+                <div id="SoftwarePanel">
+                    <h4><u>Software Analytics</u></h4>
+                    <select>
+                        <option>Comparison of OS</option>
+                        <option>Number Of Current Problems</option>
+                        <option>Problems / Time</option>
+                    </select>
+                    <canvas id="pie-chart" width="800" height="450"></canvas>
+
+                </div>
+
+                <div id="content-login">    
+                </div>
+
+            </div>
+        </div>
+
+        <script src="Chart.min.js"></script>
+        <script>
+        new Chart(document.getElementById("pie-chart"), {
+        type: 'pie',
+        data: {
+            labels: ["Windows 10", "Windows Vista", "Mac OS X", "Ubuntu"],
+            datasets: [{
+                label: "Population (millions)",
+                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                data: [52,42,36,5]
+            }]
+            },
+            options: {
+            title: {
+                display: true,
+                text: 'Comparision of Operating System Usage'
+            }
+            }
+        });
+        </script>
+    </body>
+</html> 
