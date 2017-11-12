@@ -2,6 +2,16 @@
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <script src="js/INSERT_FILE_NAME.js"> </script>
+       <script type="text/javascript" src="TS/jquery-latest.js"></script> 
+        <script type="text/javascript" src="TS/jquery.tablesorter.js"></script> 
+        <script>
+                $(document).ready(function() 
+                { 
+                    $("#myTable").tablesorter(); 
+                } 
+                ); 
+        </script>
+
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
@@ -24,6 +34,11 @@
             tr:nth-child(even) {
                 background-color: #dddddd;
             }
+            th.header { 
+                      cursor: pointer;
+
+                     background-color: #dddddd;
+                 }
         </style>
     </head>
     <body>
@@ -62,7 +77,8 @@
                     <input type="checkbox"> <span style="font-size: 10pt; padding-right: 8px;">  Assigned Tickets  </span>
                     <button style="float:right; margin-right:17.8%; margin-top:2px;"> Save Changes </button>
                 </form>
-                <table style="width: 70%;height: 20%;margin-left: 15%;margin-top: 5px;">
+                <table id="myTable" class="tablesorter" style="width: 70%;height: 20%;margin-left: 15%;margin-top: 5px;"> 
+                        <thead>
                 <tr>
                     <th>Problem Number</th>
                     <th>Caller Name</th>
@@ -72,6 +88,8 @@
                     <th>Assigned Specialist</th>
                     <th> Solved </th>
                 </tr>
+            </thead>
+            <tbody> 
                 <tr>
                     <td> <a href="SpecE.html?0001/Alan Turner/Blue Screen/Arrange In Person Visit/Software/J.Smith"> 0001 </a></td>
                     <td>Alan Turner</td>
@@ -98,7 +116,8 @@
                     <td>Updates</td>
                     <td>M.Connor</td>
                     <td> <input type="checkbox"> </td>
-                </tr>                                           
+                </tr>          
+                </tbody>                                 
                 </table>
 
             </div>

@@ -1,30 +1,44 @@
+
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <script src="js/INSERT_FILE_NAME.js"> </script>
+        <script type="text/javascript" src="TS/jquery-latest.js"></script> 
+        <script type="text/javascript" src="TS/jquery.tablesorter.js"></script> 
+        <script>
+                $(document).ready(function() 
+                { 
+                    $("#myTable").tablesorter(); 
+                } 
+                ); 
+        </script>
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
-            img {
-                width: 50%;
-                height: auto;
-            }
-            table {
-               font-family: arial, sans-serif;
-               border-collapse: collapse;
-               width: 150%;
-            }
-
-            td, th {
-                border: 1px solid #dddddd;
-                text-align: left;
-               padding: 8px;
-            }
-
-            tr:nth-child(even) {
-                background-color: #dddddd;
-            }
-        </style>
+                img {
+                    width: 50%;
+                    height: auto;
+                }
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 175%;
+                 }
+     
+                 td, th {
+                     border: 1px solid #dddddd;
+                     text-align: left;
+                    padding: 8px;
+                 }
+     
+                 tr:nth-child(even) {
+                     background-color: #dddddd;
+                 }
+                th.header { 
+                      cursor: pointer;
+                        background-color: #dddddd;
+                 }
+            </style>
     </head>
     <body>
         <div id="sidebar">
@@ -37,6 +51,7 @@
                 <hr>
                 <a href="Opp.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> Add a Ticket </button></a>
                 <a href="OppV.html"><button type="button" class="sidebar-button"> View Tickets</button></a>
+                <a href="OppE.html"><button type="button" class="sidebar-button"> Edit Ticket</button></a>
                 <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
@@ -48,13 +63,20 @@
             <div id="content-main">
                 
                 <div id="content-title">
-                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Help Desk Operator</h1>
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Help Desk Operator - Tickets</h1>
                     <hr style="color: #EEEEEE; border-width: 2px">
                 </div>
 
-                <div id="content-view">
-                    <form id="content-tickets">
-                        <table>
+                
+                <form style="margin-left: 15%; margin-top: 4%;">
+                        <b>Filter</b> <hr style="width: 82%;">
+                        <input type="checkbox"> <span style="font-size: 10pt; padding-right: 8px;"> Unsolved Tickets  </span>
+                        <input type="checkbox"> <span style="font-size: 10pt; padding-right: 8px;">  Solved Tickets  </span>
+                        <input type="checkbox"> <span style="font-size: 10pt; padding-right: 8px;">  Assigned Tickets  </span>
+                        <button style="float:right; margin-right:17.8%; margin-top:2px;"> Save Changes </button>
+                    </form>
+                        <table id="myTable" class="tablesorter" style="width: 70%;height: 20%;margin-left: 15%;margin-top: 5px;"> 
+                            <thead>
                         <tr>
                             <th>Problem Number</th>
                             <th>Caller Name</th>
@@ -62,35 +84,39 @@
                             <th>Reason for Call Back</th>
                             <th>Problem Type</th>
                             <th>Assigned Specialist</th>
+                            <th> Solved </th>
                         </tr>
+                           </thead>
+                           <tbody> 
                         <tr>
-                            <td>0001</td>
-                            <td>Alan Turner</td>
-                            <td>Blue Screen</td>
-                            <td>Arrange in Person Visit</td>
-                            <td>Software</td>
-                            <td>J.Smith</td>
-                        </tr>
-                        <tr>
-                            <td>0002</td>
-                            <td>Charlotte Holloway</td>
-                            <td>Mouse not recognised</td>
-                            <td>Order Date</td>
-                            <td>Hardware</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>0004</td>
-                            <td>Roland Foster</td>
-                            <td>Programs outdated</td>
-                            <td>N/A</td>
-                            <td>Updates</td>
-                            <td>M.Connor</td>
-                        </tr>
-                        
+                                <td> <a href="OppE.html?0001/Alan Turner/Blue Screen/Arrange In Person Visit/Software/J.Smith"> 0001 </a></td>
+                                <td>Alan Turner</td>
+                                <td>Blue Screen</td>
+                                <td>Arrange in Person Visit</td>
+                                <td>Software</td>
+                                <td>J.Smith</td>
+                                <td> <input type="checkbox"> </td>
+                            </tr>
+                            <tr>
+                                <td> <a href="OppE.html?0002/Charlotte Holloway/ Mouse not recognised/Order Date/Hardware/None"> 0002 </a></td>
+                                <td>Charlotte Holloway</td>
+                                <td>Mouse not recognised</td>
+                                <td>Order Date</td>
+                                <td>Hardware</td>
+                                <td>None</td>
+                                <td> <input type="checkbox"> </td>
+                            </tr>
+                            <tr>
+                                <td> <a href="OppE.html?0004/Roland Foster/Programs outdated/None/Updates/M.Connor"> 0004 </a></td>
+                                <td>Roland Foster</td>
+                                <td>Programs outdated</td>
+                                <td>None</td>
+                                <td>Updates</td>
+                                <td>M.Connor</td>
+                                <td> <input type="checkbox"> </td>
+                            </tr>   
+                         </tbody> 
                         </table>
-                    </form>
-                </div>
 
             </div>
         </div>

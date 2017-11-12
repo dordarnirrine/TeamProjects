@@ -1,9 +1,24 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script src="js/INSERT_FILE_NAME.js"> </script>
-        <script type="text/javascript" src="jquery-latest.js"></script> 
-        <script type="text/javascript" src="jquery.tablesorter.js"></script> 
+        <script src="js/index.js"> </script>
+
+        <script>
+            window.onload = function(){
+                var params = window.location.href.split("?")[1].split("/")
+                var input = document.getElementsByClassName("form-input");
+                console.log(params);
+                console.log(input);
+                    
+                for(var i=0; i < input.length; i++){
+                    console.log(input[i]);
+                    console.log(params[i]);
+                    input[i].value = params[i].split("%20").join(" ");
+                }
+
+                document.getElementById("content-title-heading").innerHTML = "Edit Ticket #" + params[0] + " ~ " + params[1].split("%20").join(" ");
+            }
+        </script>
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
@@ -14,7 +29,7 @@
             table {
                font-family: arial, sans-serif;
                border-collapse: collapse;
-               width: 100%;
+               width: 175%;
             }
 
             td, th {
@@ -51,7 +66,7 @@
             <div id="content-main">
                 
                 <div id="content-title">
-                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Create A Ticket</h1>
+                    <h1 id="content-title-heading" style="color: #121212; text-indent: 25px; margin-bottom: 2px">Edit Ticket</h1>
                     <hr style="color: #EEEEEE; border-width: 2px">
                 </div>
 
@@ -64,17 +79,18 @@
                         <span class="form-text"> Problem Type: </span> <input class="form-input" type="text" name="user"> <br> <br>
                         <span class="form-text"> Assigned Specialist: </span>
                         <select class="form-input">
-                            <option value="J.Smith">J.Smith</option>
-                            <option value="M.Connor">M.Connor</option>
-                            <option value="R.Mendel">R.Mendel</option>
-                            <option value="H.Bennett">H.Bennett</option>
-                            <option value="M.Anders">M.Anders</option>
-                            <option value="F.Chang">F.Chang </option>
-                        </select>
-                        
-                        <br> <br>
-                   <button type="button" style="margin-left: 35%; margin-top: 25px; width: 30%;"> Submit </button>
-               </form>
+                                <option value="J.Smith">J.Smith</option>
+                                <option value="M.Connor">M.Connor</option>
+                                <option value="R.Mendel">R.Mendel</option>
+                                <option value="H.Bennett">H.Bennett</option>
+                                <option value="M.Anders">M.Anders</option>
+                                <option value="F.Chang">F.Chang </option>
+                            </select>
+                            <br> <br>
+                        <span class="form-text"> Solution: </span> <textarea class="form-input-large" cols="30" rows="4"></textarea> <br> <br> <br> <br> <br>
+                        <span class="form-text"> Date / Time: </span> <input class="form-input" type="datetime-local"> <br> <br>
+                        <button type="button" style="margin-left: 35%; margin-top: 25px; width: 30%;"> Save Changes </button>
+                    </form>
                 </div>
 
             </div>
