@@ -106,7 +106,7 @@ html, body {
 }
 
 .form-input {
-    width: 180px;
+    width: 280px;
     height: 20px;
 
     float: right;
@@ -115,6 +115,18 @@ html, body {
 
     border-radius: 5px 5px 5px 5px;
     border-color: white;
+}
+
+.form-input-large {
+    width: 400px;
+    height: 80px;
+
+    float: right;
+    margin-right: 5%;
+    margin-top: 5px;
+
+    border-radius: 5px 5px 5px 5px;
+    border-color: #333333;
 }
 
 .form-button {
@@ -132,11 +144,12 @@ html, body {
     margin-left: 5%;
     margin-top: 7%;
 }
-#content-tick {
 
-    width: 50%;
-    height: 30%;
+#content-tickets {
 
-    margin-left: 5%;
+    width: 70%;
+    height: 20%;
+
+    margin-left: 15%;
     margin-top: 7%;
 }

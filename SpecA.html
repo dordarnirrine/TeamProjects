@@ -35,8 +35,10 @@
             <div id="sidebar-buttons">
                 <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
                 <hr>
-                <a href="Opp.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> Add a Ticket </button></a>
-                <a href="OppV.html"><button type="button" class="sidebar-button"> View Tickets</button></a>
+                <a href="SpecV.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> View Tickets</button></a>
+                <a href="Spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="SpecA.html"><button type="button" class="sidebar-button"> Add a Ticket </button></a>
+                <a href="SpecE.html"><button type="button" class="sidebar-button"> Edit Ticket</button></a>
                 <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
@@ -48,19 +50,29 @@
             <div id="content-main">
                 
                 <div id="content-title">
-                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Create A Ticket</h1>
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Add a Ticket</h1>
                     <hr style="color: #EEEEEE; border-width: 2px">
                 </div>
 
-                <div id="content-tick">
+
                     <form id="content-tickets">
                         <span class="form-text"> Problem Number: </span> <input class="form-input" type="text" name="user"> <br> <br>
                         <span class="form-text"> Caller Name: </span> <input class="form-input" type="text" name="pass"> <br> <br>
                         <span class="form-text"> Description of Problem: </span> <input class="form-input" type="text" name="user"> <br> <br>
                         <span class="form-text"> Reason for Call Back: </span> <input class="form-input" type="Text" name="pass"> <br> <br>
                         <span class="form-text"> Problem Type: </span> <input class="form-input" type="text" name="user"> <br> <br>
-                        <span class="form-text"> Assigned Specialist: </span> <input class="form-input" type="Text" name="pass"> <br> <br>
-
+                        <span class="form-text"> Assigned Specialist: </span>
+                             <select class="form-input">
+                                 <option value="J.Smith">J.Smith</option>
+                                 <option value="M.Connor">M.Connor</option>
+                                 <option value="R.Mendel">R.Mendel</option>
+                                 <option value="H.Bennett">H.Bennett</option>
+                                 <option value="M.Anders">M.Anders</option>
+                                 <option value="F.Chang">F.Chang </option>
+                             </select>
+                             
+                             <br> <br>
+                        <button type="button" style="margin-left: 35%; margin-top: 25px; width: 30%;"> Submit </button>
                     </form>
                 </div>
 
