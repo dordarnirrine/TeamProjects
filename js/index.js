@@ -21,15 +21,15 @@ function choosePage(){
     }
 }
 
-var text = document.getElementsByClassName("form-failed");
+
 function loginFailed(b){
-    
-    console.log(text.value);
+    var text = document.getElementsByClassName("form-failed")[0];
+    console.log(text);
     if (b) {
-        text.value = "Login Failed! Wrong Username / Password";
+        text.textContent = "Incorrect Username or Password";
     }
     else{
-        text.value = "";
+        text.textContent = "";
     }
     return b;
 }
