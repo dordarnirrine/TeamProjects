@@ -1,8 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script src="js/INSERT_FILE_NAME.js"> </script>
-
+        
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
             img {
@@ -104,15 +103,17 @@
 
                 <div id="ChooseSpecPanel">
                    <h4><u>Specialist</u></h4>
+
                     <select id="specList">
-                        <option value="Angel Wallace">Angel Wallace </option>
-                        <option value="Irvin  Cruz">Irvin  Cruz</option>
-                        <option value="Grant  Santos">Grant  Santos</option>
-                        <option value="Faye   Sandoval">Faye Sandoval</option>
-                        <option value="Ora Rodgers">Ora Rodgers</option>
-                        <option value="Charlie Reeves">Charlie Reeves</option>
-                        <option value="Jenna Miles">Jenna Miles</option>
+                        <option value="Angel Wallace" id="1">Angel Wallace </option>
+                        <option value="Irvin  Cruz" id="2">Irvin  Cruz</option>
+                        <option value="Grant  Santos" id="3">Grant  Santos</option>
+                        <option value="Faye   Sandoval" id="4">Faye Sandoval</option>
+                        <option value="Ora Rodgers" id="5">Ora Rodgers</option>
+                        <option value="Charlie Reeves" id="6">Charlie Reeves</option>
+                        <option value="Jenna Miles" id="7">Jenna Miles</option>
                     </select>
+
                     <ul id="SpecInfo">
                         <li id="specName">Name: <strong>Angel Wallace</strong></li>
                         <li id="specAge">Age: <strong>32</strong></li>
@@ -150,6 +151,7 @@
 
         <script src="Chart.min.js"></script>
 
+
         <script>
             new Chart(document.getElementById("line-chart"), {
                 type: 'line',
@@ -176,54 +178,38 @@
 
 
 
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
         <script type="text/javascript">
+            
+            //different specialist chosen
+            $("#specList").change(function() {
+                var selectedSpec = $(this).find('option:selected').text();
+                setSpecData($(this).find('option:selected').text());
+            });
 
 
-            function specialistChosen(selectedSpec){
-                var angel = {
-                    name: "Angel Wallace",
-                    age: "32",
-                    staffID: "H2h25821",
-                    averageTime : "11 Days, 12 Hours",
-                    numOfSols : 42,
-                    areas : ["Printers", "Scanners"]
-                };
+            //different graph chosen
 
-                var irvin = {
-                    name: "Irvin Cruz",
-                    age: "26",
-                    staffID: "G48732947",
-                    averageTime : "18 Days, 20 Hours",
-                    numOfSols : 16,
-                    areas : ["Windows 10", "Windows Vista"]
-                };
-                
-                 if(selectedSpec.value == "Angel Wallace"){
-                   document.getElementById("specName").innerHTML.replace(*,"Name: <strong>Angel Wallace</strong>");
-                   document.getElementById("specAge").innerHTML.replace();
-                   document.getElementById("specID").innerHTML.replace();
-                   document.getElementById("specTime").innerHTML.replace();
-                   document.getElementById("specNoProbs").innerHTML.replace();
-                   document.getElementById("specNoSols").innerHTML.replace();
-                   document.getElementById("spec1").innerHTML.replace();
-                   document.getElementById("spec2").innerHTML.replace();
+            $("#analyticsChoice").change(function() {
+               var chosenMetric = $(this).find('option:selected').text();
+               setChartShown($(this).find('option:selected').text());
+            });            
 
-                } else {
-                    document.getElementById("specName").innerHTML.replace(*,"Name: <strong>Irvin Cruz</strong>");
-                    /*
-                    document.getElementById("specAge").innerHTML.replace();
-                    document.getElementById("specID").innerHTML.replace();
-                    document.getElementById("specTime").innerHTML.replace();
-                    document.getElementById("specNoProbs").innerHTML.replace();
-                    document.getElementById("specNoSols").innerHTML.replace();
-                    document.getElementById("spec1").innerHTML.replace();
-                    document.getElementById("spec2").innerHTML.replace();
-                    */
-                    
 
-                }
 
+            function setSpecData(selectedSpec) {
+                console.log(selectedSpec);
+                $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
+                //get data from database query
+                //change corresponding data fro database
             }
+
+
+            function setChartShown(chosenMetric) {
+                console.log(chosenMetric);
+            }
+
 
         </script>
 

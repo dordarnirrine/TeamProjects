@@ -108,7 +108,7 @@
 
                 <div id="ChooseSoftPanel">
                     <h4><u>Choose Software</u></h4>
-                    <select>
+                    <select id ="chosenSoftware">
                         <option value="windows10">Windows 10</option>
                         <option value="windows9">Windows Vista</option>
                         <option value="softwarev43">Mac OS X</option>
@@ -128,7 +128,7 @@
 
                 <div id="SoftwarePanel">
                     <h4><u>Software Analytics</u></h4>
-                    <select>
+                    <select id="softwareMetric">
                         <option>Comparison of OS</option>
                         <option>Number Of Current Problems</option>
                         <option>Problems / Time</option>
@@ -162,6 +162,35 @@
             }
             }
         });
+        </script>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script type="text/javascript">
+           
+
+            $("#chosenSoftware").change(function() {
+                setSoftwareData($(this).find('option:selected').text());
+            });
+
+
+            $("#softwareMetric").change(function() {
+                setMetricData($(this).find('option:selected').text())
+            });
+
+
+
+            function setSoftwareData(chosenSoftware) {
+                console.log(chosenSoftware);
+            }
+
+
+            function setMetricData(selectedMetric){
+                console.log(selectedMetric);
+            }
+
+
         </script>
     </body>
 </html> 

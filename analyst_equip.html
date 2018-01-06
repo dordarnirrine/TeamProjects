@@ -112,13 +112,13 @@
                     <h4><u>Equipment</u></h4>
                     
                     <ul id="EquipInfo">
-                        <select >
-                        <option value="printer">HP Deskjet 3636</option>
-                        <option value="scanner">Fujitsu ScanSnap S1300i</option>
-                        <option value="desktop">HP 260-a104na</option>
-                        <option value="phone">Mitel 5324</option>
+                        <select id="chosenEquip">
+                            <option value="printer">HP Deskjet 3636</option>
+                            <option value="scanner">Fujitsu ScanSnap S1300i</option>
+                            <option value="desktop">HP 260-a104na</option>
+                            <option value="phone">Mitel 5324</option>
                     
-                    </select>
+                        </select >
                         <li>Make: <strong>Mitel</strong></li>
                         <li>Model: <strong>5324</strong></li>
                         <li>Equipment Type: <strong>Phone</strong></li>
@@ -130,7 +130,7 @@
 
                 <div id="EquipmentAnalytics">
                     <h4><u>Specialist Analytics</u></h4>
-                    <select id="analyticsChoice">
+                    <select id="equipmentMetric">
                         <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
                         <option value="NoOfProbs">Number Of Problems / Time</option>
                         <option value="Time to find Solutions">Time To Find Solutions</option>
@@ -164,12 +164,37 @@
                 });
 
         </script>
-
-
-                <div id="content-login">    
-                </div>
-
             </div>
         </div>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script type="text/javascript">
+           
+
+            $("#chosenEquip").change(function() {
+                setEquipData($(this).find('option:selected').text());
+            });
+
+
+            $("#equipmentMetric").change(function() {
+                setMetricData($(this).find('option:selected').text());
+            });
+
+
+
+            function setEquipData(chosenEquip) {
+                console.log(chosenEquip);
+            }
+
+
+            function setMetricData(selectedMetric){
+                console.log(selectedMetric);
+            }
+
+
+        </script>
     </body>
 </html> 
