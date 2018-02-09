@@ -119,11 +119,11 @@
                             <option value="phone">Mitel 5324</option>
                     
                         </select >
-                        <li>Make: <strong>Mitel</strong></li>
-                        <li>Model: <strong>5324</strong></li>
-                        <li>Equipment Type: <strong>Phone</strong></li>
-                        <li>Number Of Current Problems: <strong>7</strong></li>
-                        <li>Total Number of Problems: <strong>15</strong></li>
+                        <li id ="Make">Make: <strong>Mitel</strong></li>
+                        <li id="Model">Model: <strong>5324</strong></li>
+                        <li id="EquipType">Equipment Type: <strong>Phone</strong></li>
+                        <li id="CurrentProbs">Number Of Current Problems: <strong>7</strong></li>
+                        
                     </ul>
 
                 </div>
@@ -133,35 +133,55 @@
                     <select id="equipmentMetric">
                         <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
                         <option value="NoOfProbs">Number Of Problems / Time</option>
-                        <option value="Time to find Solutions">Time To Find Solutions</option>
-                        
+                       
                     </select>
-                    <canvas id="bar-chart" ></canvas>
+                    <canvas id="canvas" ></canvas>
                 </div>
 
                 <script src="Chart.min.js"></script>
                 <script>
-                new Chart(document.getElementById("bar-chart"), {
-                    type: 'bar',
+                var probTimeChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
                     data: {
-                        labels: ["HP Deskjet", "Mitel 5324", "HP 260-a104na", "Fujitsu ScanSnap"],
-                        datasets: [
-                        {
-                            label: "Total Number of Problems",
-                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                            data: [150,300,60,12]
+                        labels: [1,2,3,4,5],
+                        datasets: [{ 
+                            data: [12,8,1,6,1],
+                            label: "Equipment",
+                            borderColor: "#3e95cd",
+                            fill: false
+   
                         }
-                        ]
+                        ]           
                     },
-                    options: {
-                        legend: { display: false },
-                        title: {
-                            display: true,
-                            text: 'Total Number of Problems'
+                            options: {
+                                title: {
+                                display: true,
+                                text: 'Number Of Current Problems / Time'
+                            }
                         }
-                    }
-
                 });
+
+                var numOfProbChart = new Chart(document.getElementById("canvas"), {
+                            type: 'bar',
+                            data: {
+                                labels: ["Highest","Chosen Equipment","Lowest"],
+                                datasets: [
+                                {
+                                    label: "Total Number of Problems",
+                                    backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                                    data: [15,2,1]
+                                }
+                                ]
+                            },
+                            options: {
+                                legend: { display: false },
+                                title: {
+                                    display: true,
+                                    text: 'Total Number of Problems'
+                                }
+                            }
+
+                        });       
 
         </script>
             </div>
@@ -187,11 +207,68 @@
 
             function setEquipData(chosenEquip) {
                 console.log(chosenEquip);
+                $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
             }
 
 
             function setMetricData(selectedMetric){
                 console.log(selectedMetric);
+                if (selectedMetric == "Comparison of Number of Problems") {
+                    if(probTimeChart) {
+                        probTimeChart.destroy();
+
+                        //draw numOfProbChart
+                        numOfProbChart = new Chart(document.getElementById("canvas"), {
+                            type: 'bar',
+                            data: {
+                                labels: ["Highest","Chosen Equipment","Lowest"],
+                                datasets: [
+                                {
+                                    label: "Total Number of Problems",
+                                    backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                                    data: [15,2,1]
+                                }
+                                ]
+                            },
+                            options: {
+                                legend: { display: false },
+                                title: {
+                                    display: true,
+                                    text: 'Total Number of Problems'
+                                }
+                            }
+
+                        });       
+
+                    }
+
+                } else {
+                    if(numOfProbChart){
+                        numOfProbChart.destroy();
+                        //draw probTimeChart
+                        probTimeChart = new Chart(document.getElementById("canvas"), {
+                            type: 'line',
+                            data: {
+                                labels: [1,2,3,4,5],
+                                datasets: [{ 
+                                    data: [12,8,1,6,1],
+                                    label: "Angel Wallace",
+                                    borderColor: "#3e95cd",
+                                    fill: false
+   
+                                }
+                                ]           
+                            },
+                                    options: {
+                                        title: {
+                                        display: true,
+                                        text: 'Number Of Current Problems / Time'
+                                    }
+                                }
+                        });    //end of draw numOfProbChart                 
+
+                    }
+                }
             }
 
 

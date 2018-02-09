@@ -129,11 +129,11 @@
                 <div id="SoftwarePanel">
                     <h4><u>Software Analytics</u></h4>
                     <select id="softwareMetric">
-                        <option>Comparison of OS</option>
-                        <option>Number Of Current Problems</option>
+                        
+                        <option>Comparison of Number of Problems</option>
                         <option>Problems / Time</option>
                     </select>
-                    <canvas id="pie-chart" width="800" height="450"></canvas>
+                    <canvas id="canvas" width="800" height="450"></canvas>
 
                 </div>
 
@@ -145,23 +145,48 @@
 
         <script src="Chart.min.js"></script>
         <script>
-        new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: ["Windows 10", "Windows Vista", "Mac OS X", "Ubuntu"],
-            datasets: [{
-                label: "Population (millions)",
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                data: [52,42,36,5]
-            }]
-            },
-            options: {
-            title: {
-                display: true,
-                text: 'Comparision of Operating System Usage'
-            }
-            }
-        });
+                var probTimeChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5],
+                        datasets: [{ 
+                            data: [12,8,1,6,1],
+                            label: "Equipment",
+                            borderColor: "#3e95cd",
+                            fill: false
+   
+                        }
+                        ]           
+                    },
+                            options: {
+                                title: {
+                                display: true,
+                                text: 'Number Of Current Problems / Time'
+                            }
+                        }
+                });
+
+                var numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Highest", "Chosen Software", "Lowest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [13,12,1]
+                        }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                });
         </script>
 
 
@@ -183,11 +208,68 @@
 
             function setSoftwareData(chosenSoftware) {
                 console.log(chosenSoftware);
+
             }
 
 
             function setMetricData(selectedMetric){
                 console.log(selectedMetric);
+                if (selectedMetric == "Comparison of Number of Problems") {
+                    if(probTimeChart) {
+                        probTimeChart.destroy();
+
+                        //draw numOfProbChart
+                        numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Highest", "Chosen Software", "Lowest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [13,12,1]
+                        }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                });      
+
+                    }
+
+                } else {
+                    if(numOfProbChart){
+                        numOfProbChart.destroy();
+                        //draw probTimeChart
+                        probTimeChart = new Chart(document.getElementById("canvas"), {
+                            type: 'line',
+                            data: {
+                                labels: [1,2,3,4,5],
+                                datasets: [{ 
+                                    data: [12,8,1,6,1],
+                                    label: "Angel Wallace",
+                                    borderColor: "#3e95cd",
+                                    fill: false
+   
+                                }
+                                ]           
+                            },
+                                    options: {
+                                        title: {
+                                        display: true,
+                                        text: 'Number Of Current Problems / Time'
+                                    }
+                                }
+                        });    //end of draw numOfProbChart                 
+
+                    }
+                }
             }
 
 
