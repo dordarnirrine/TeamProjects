@@ -90,7 +90,7 @@
         </script>
     </head>
         
-    <body>
+    <body onload="createBacklogChart()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -121,10 +121,8 @@
                 <p> Choose What Data you Wish to View: 
                 <select id="chartSelect">
                     <option>View "Backlog" Data</option>
-                    <option>View "Time to Solution Individuals" Data</option>
-                    <option>View "Problems with Software" Data</option>
-                    <option>View "Problems with Equipment" Data</option>
-                    <option>View "Problems Set to Specialists" Data</option>
+                    <option>View "Average Time to Find Solution" Data</option>
+                    
                 </select>
 
 
@@ -132,7 +130,9 @@
                     <h4><u>Backlog: </u> The number of on-going problems</h4>
                     <p>Total Backlog: <strong>532</strong></p>
                     <p>Average Backlog: <strong>445</strong></p>
-                    <canvas id="line-chart" height=90></canvas>
+
+                    <canvas id="canvas" height=90></canvas>
+               
                </div>
 
 
@@ -144,7 +144,29 @@
          <script src="Chart.min.js"></script>
 
          <script>
-         new Chart(document.getElementById("line-chart"), {
+         
+        var timeChart = new Chart(document.getElementById("canvas"), {
+            type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6],
+                    datasets: [{ 
+                    data: [12,13,15,17,23,12],
+                    label: "Time To Find Solution",
+                    borderColor: "#3e95cd",
+                    fill: false
+                    }]
+                },
+                options: {
+                title: {
+                    display: true,
+                    text: 'Time to Find Solution Chart',
+                    responsive: true,
+                }
+            }
+        }); 
+
+
+        var backlogChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
                 data: {
                     labels: [1,2,3,4,5,6,7,8,9,10],
@@ -164,11 +186,12 @@
                 options: {
                 title: {
                     display: true,
-                    text: 'Backlog Chart'
+                    text: 'Backlog Chart',
+                    responsive: true,
                 }
             }
         });
-         </script>
+        </script>
 
 
 
@@ -176,19 +199,79 @@
         
         <script type="text/javascript">
             
+
             //different chart chosen
             $("#chartSelect").change(function() {
-               
-                setChartShown($(this).find('option:selected').text());
+               setChartShown($(this).find('option:selected').text());
             });
 
 
 
             function setChartShown(chosenMetric) {
-                console.log(chosenMetric);                
+
+                console.log(document.getElementById("canvas"));      
+                
+                if(chosenMetric == "View \"Backlog\" Data"){
+                    console.log("test 1");
+                    if (timeChart) {
+                        timeChart.destroy();
+                        
+                        //Draw backlog chart
+                        backlogChart = new Chart(document.getElementById("canvas"), {
+                        type: 'line',
+                        data: {
+                            labels: [1,2,3,4,5,6,7,8,9,10],
+                            datasets: [{ 
+                                data: [500,550,575,588,577,530,490,390,440,532],
+                                label: "Backlog",
+                                borderColor: "#3e95cd",
+                                fill: false
+                            }, { 
+                                data: [445,446,447,445,445,445,445,445,445,445],
+                                label: "Average",
+                                borderColor: "#8e5ea2",
+                                fill: false
+                            }
+                            ]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Backlog Chart',
+                                responsive: true,
+                            }
+                        }
+                        }); //end of draw backlog chart
+
+                    }
+                } else {
+                    if (backlogChart) {
+                        backlogChart.destroy();
+
+                        timeChart = new Chart(document.getElementById("canvas"), {  //draw time chart
+                            type: 'line',
+                            data: {
+                                labels: [1,2,3,4,5,6],
+                                datasets: [{ 
+                                    data: [12,13,15,17,23,12],
+                                    label: "Time To Find Solution",
+                                    borderColor: "#3e95cd",
+                                    fill: false
+                                }]
+                            },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Time to Find Solution Chart',
+                                responsive: true,
+                            }
+                        }
+                    }); //end of draw time chart
+
+                    }
+                }
             }
 
-
-        </script>
+            </script>
     </body>
 </html> 
