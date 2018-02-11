@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script src="js/INSERT_FILE_NAME.js"> </script>
+        <!-- <script src="js/INSERT_FILE_NAME.js"> </script> -->
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <style>
@@ -90,7 +90,7 @@
         </script>
     </head>
         
-    <body onload="createBacklogChart()">
+    <body>
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -129,8 +129,7 @@
                <div id ="Backlog">
                     <h4><u>Backlog: </u> The number of on-going problems</h4>
                     <p>Total Backlog: <strong>532</strong></p>
-                    <p>Average Backlog: <strong>445</strong></p>
-
+                    
                     <canvas id="canvas" height=90></canvas>
                
                </div>
@@ -140,10 +139,10 @@
         </div>
 
 
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+        <script src="Chart.min.js"></script>
 
-         <script src="Chart.min.js"></script>
-
-         <script>
+        <script>
          
         var timeChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
@@ -169,18 +168,13 @@
         var backlogChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
                 data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
+                    labels: [1,2,3,4,5],
                     datasets: [{ 
-                    data: [500,550,575,588,577,530,490,390,440,532],
-                    label: "Backlog",
-                    borderColor: "#3e95cd",
-                    fill: false
-                }, { 
-                    data: [445,446,447,445,445,445,445,445,445,445],
-                    label: "Average",
-                borderColor: "#8e5ea2",
-                fill: false
-                }
+                        data: [3,4,5,1,2],
+                        label: "Backlog",
+                        borderColor: "#3e95cd",
+                        fill: false
+                },
                 ]
                 },
                 options: {
@@ -208,69 +202,88 @@
 
 
             function setChartShown(chosenMetric) {
-
-                console.log(document.getElementById("canvas"));      
-                
+                if(!chosenMetric) chosenMetric = document.getElementById("chartSelect").value;
+     
                 if(chosenMetric == "View \"Backlog\" Data"){
-                    console.log("test 1");
+                    
                     if (timeChart) {
                         timeChart.destroy();
                         
-                        //Draw backlog chart
-                        backlogChart = new Chart(document.getElementById("canvas"), {
-                        type: 'line',
-                        data: {
-                            labels: [1,2,3,4,5,6,7,8,9,10],
-                            datasets: [{ 
-                                data: [500,550,575,588,577,530,490,390,440,532],
-                                label: "Backlog",
-                                borderColor: "#3e95cd",
-                                fill: false
-                            }, { 
-                                data: [445,446,447,445,445,445,445,445,445,445],
-                                label: "Average",
-                                borderColor: "#8e5ea2",
-                                fill: false
-                            }
-                            ]
-                        },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'Backlog Chart',
-                                responsive: true,
-                            }
-                        }
-                        }); //end of draw backlog chart
+                        //Get data from php
+                        $.ajax({
+                            type: "POST",
+                            url: "template.php",
+                            success: function(data){
+
+                                console.log(data);
+                                //convert data to a type to be used for the graphs
+
+                                //draw backlog chart with data from database
+                                backlogChart = new Chart(document.getElementById("canvas"), {
+                                type: 'line',
+                                data: {
+                                    labels: [1,2,3,4,5],
+                                    datasets: [{ 
+                                        data: [3,4,5,1,2],
+                                        label: "Backlog",
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    },
+                                    ]
+                                },
+                                options: {
+                                    title: {
+                                        display: true,
+                                        text: 'Backlog Chart',
+                                        responsive: true,
+                                    }
+                                }       
+                                }); //end of draw backlog chart
+                            }   //end of success function 
+
+                        }); //end of $.ajax
 
                     }
+
+
                 } else {
                     if (backlogChart) {
                         backlogChart.destroy();
 
-                        timeChart = new Chart(document.getElementById("canvas"), {  //draw time chart
-                            type: 'line',
-                            data: {
-                                labels: [1,2,3,4,5,6],
-                                datasets: [{ 
-                                    data: [12,13,15,17,23,12],
-                                    label: "Time To Find Solution",
-                                    borderColor: "#3e95cd",
-                                    fill: false
-                                }]
-                            },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'Time to Find Solution Chart',
-                                responsive: true,
+                        $.ajax({
+                            type: "POST",
+                            url: "template.php",
+                            success: function(data){
+                                console.log(data);
+                                timeChart = new Chart(document.getElementById("canvas"), {  //draw time chart
+                                    type: 'line',
+                                    data: {
+                                        labels: [1,2,3,4,5,6],
+                                        datasets: [{ 
+                                            data: [12,13,15,17,23,12],
+                                            label: "Time To Find Solution",
+                                            borderColor: "#3e95cd",
+                                            fill: false
+                                        }]
+                                    },
+                                    options: {
+                                        title: {
+                                            display: true,
+                                            text: 'Time to Find Solution Chart',
+                                            responsive: true,
+                                        }
+                                    }
+                                }); //end of draw time chart
+    
                             }
-                        }
-                    }); //end of draw time chart
+
+                        })
 
                     }
                 }
             }
+
+
 
             </script>
     </body>

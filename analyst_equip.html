@@ -140,6 +140,7 @@
 
                 <script src="Chart.min.js"></script>
                 <script>
+
                 var probTimeChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     data: {
@@ -206,39 +207,51 @@
 
 
             function setEquipData(chosenEquip) {
-                console.log(chosenEquip);
-                $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
+                
+                $('#specName').html("Name: <strong>" + chosenEquip + "</strong>");
             }
 
 
             function setMetricData(selectedMetric){
-                console.log(selectedMetric);
+                
                 if (selectedMetric == "Comparison of Number of Problems") {
                     if(probTimeChart) {
                         probTimeChart.destroy();
 
-                        //draw numOfProbChart
-                        numOfProbChart = new Chart(document.getElementById("canvas"), {
-                            type: 'bar',
-                            data: {
-                                labels: ["Highest","Chosen Equipment","Lowest"],
-                                datasets: [
-                                {
-                                    label: "Total Number of Problems",
-                                    backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                                    data: [15,2,1]
-                                }
-                                ]
-                            },
-                            options: {
-                                legend: { display: false },
-                                title: {
-                                    display: true,
-                                    text: 'Total Number of Problems'
-                                }
-                            }
+                        $.ajax({
+                            type: "POST",
+                            url: "template.php",
+                            success: function(data){
 
-                        });       
+                                //draw numOfProbChart
+                                console.log(data);
+                                
+                                numOfProbChart = new Chart(document.getElementById("canvas"), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ["Highest","Chosen Equipment","Lowest"],
+                                        datasets: [
+                                        {
+                                            label: "Total Number of Problems",
+                                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                                            data: [15,2,1]
+                                        }
+                                        ]
+                                    },
+                                    options: {
+                                        legend: { display: false },
+                                        title: {
+                                            display: true,
+                                            text: 'Total Number of Problems'
+                                        }
+                                    }
+
+                                }); //end of draw chart
+                            }
+                        })  //end of ajax
+
+
+                               
 
                     }
 
@@ -246,26 +259,36 @@
                     if(numOfProbChart){
                         numOfProbChart.destroy();
                         //draw probTimeChart
-                        probTimeChart = new Chart(document.getElementById("canvas"), {
-                            type: 'line',
-                            data: {
-                                labels: [1,2,3,4,5],
-                                datasets: [{ 
-                                    data: [12,8,1,6,1],
-                                    label: "Angel Wallace",
-                                    borderColor: "#3e95cd",
-                                    fill: false
+
+                        $.ajax({
+                            type: "POST",
+                            url: "template.php",
+                            success: function(data){
+                                console.log(data);
+                                probTimeChart = new Chart(document.getElementById("canvas"), {
+                                    type: 'line',
+                                    data: {
+                                        labels: [1,2,3,4,5],
+                                        datasets: [{ 
+                                            data: [12,8,1,6,1],
+                                            label: "Angel Wallace",
+                                            borderColor: "#3e95cd",
+                                            fill: false
    
-                                }
-                                ]           
-                            },
+                                        }
+                                        ]           
+                                    },
                                     options: {
                                         title: {
                                         display: true,
                                         text: 'Number Of Current Problems / Time'
+                                        }
                                     }
-                                }
-                        });    //end of draw numOfProbChart                 
+                                });    //end of draw numOfProbChart                     
+                            }
+                        }) //end of ajax
+
+                            
 
                     }
                 }
