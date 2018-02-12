@@ -90,7 +90,7 @@
         </script>
     </head>
         
-    <body>
+    <body onload="setChartShown()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -212,7 +212,8 @@
                         //Get data from php
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "genBacklog"},
                             success: function(data){
 
                                 console.log(data);
@@ -252,7 +253,8 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "genTimeProb"},
                             success: function(data){
                                 console.log(data);
                                 timeChart = new Chart(document.getElementById("canvas"), {  //draw time chart

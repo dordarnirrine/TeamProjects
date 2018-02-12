@@ -77,7 +77,7 @@
 
 
 
-    <body>
+    <body onload="setMetricData()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -131,8 +131,8 @@
                 <div id="EquipmentAnalytics">
                     <h4><u>Specialist Analytics</u></h4>
                     <select id="equipmentMetric">
-                        <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
-                        <option value="NoOfProbs">Number Of Problems / Time</option>
+                        <option value="Comparison of Number of Problems">Comparison of Number of Problems</option> 
+                        <option value="Number Of Problems / Time">Number Of Problems / Time</option>
                        
                     </select>
                     <canvas id="canvas" ></canvas>
@@ -207,20 +207,22 @@
 
 
             function setEquipData(chosenEquip) {
-                
                 $('#specName').html("Name: <strong>" + chosenEquip + "</strong>");
+                setMetricData();
             }
 
 
             function setMetricData(selectedMetric){
-                
+                if(!selectedMetric) selectedMetric = document.getElementById("equipmentMetric").value;
+              
                 if (selectedMetric == "Comparison of Number of Problems") {
                     if(probTimeChart) {
                         probTimeChart.destroy();
 
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "equipNumProb"},
                             success: function(data){
 
                                 //draw numOfProbChart
@@ -262,7 +264,8 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "equipProbTime"},
                             success: function(data){
                                 console.log(data);
                                 probTimeChart = new Chart(document.getElementById("canvas"), {

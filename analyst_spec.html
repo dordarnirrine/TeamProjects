@@ -72,7 +72,7 @@
 
 
 
-    <body>
+    <body onload="setChartShown()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -135,10 +135,10 @@
                 <div id="SpecialistPanel">
                     <h4><u>Specialist Analytics</u></h4>
                     <select id="analyticsChoice">
-                        <option value="probs/time">Number Of Problems / Time</option>
-                        <option value="Time to find Solutions">Time To Find Solutions</option>
-                        
+                        <option value="Number Of Problems / Time">Number Of Problems / Time</option>
+                        <option value="Time To Find Solutions">Time To Find Solutions</option>
                     </select>
+
                     <canvas id="canvas" ></canvas>
                 </div>
 
@@ -219,15 +219,13 @@
 
 
             function setSpecData(selectedSpec) {
-                console.log(selectedSpec);
                 $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
-                //get data from database query
-                //change corresponding data fro database
+                setChartShown();
             }
 
 
             function setChartShown(chosenMetric) {
-                
+                if(!chosenMetric) chosenMetric = document.getElementById("analyticsChoice").value;
                 if (chosenMetric == "Number Of Problems / Time") {
                     
                     if(timeToSolChart) {
@@ -236,7 +234,8 @@
                          //Get data from php
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "specNumProb"},
                             success: function(data){
                                 console.log(data);
                                 //draw the chart
@@ -245,7 +244,7 @@
                                     data: {
                                         labels: [1,2,3,4,5,6,7,8,9,10],
                                         datasets: [{ 
-                                            data: [12,10,8,6,6,1,5,9,8,7],
+                                            data: [12,10,8,6,6,1,5,9,8,7],  
                                             label: "Angel Wallace",
                                             borderColor: "#3e95cd",
                                             fill: false
@@ -275,7 +274,8 @@
                         
                         $.ajax({
                             type: "POST",
-                            url: "template.php",
+                            url: "metricsPHP/template.php",
+                            data: {type: "specProbTime"},
                             success: function(data){
                                 console.log(data);
                                 
