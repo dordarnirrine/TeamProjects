@@ -212,7 +212,7 @@
                         //Get data from php
                         $.ajax({
                             type: "POST",
-                            url: "metricsPHP/template.php",
+                            url: "metricsPHP/metricsEZSQL.php",
                             data: {type: "genBacklog"},
                             success: function(data){
 
@@ -253,7 +253,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "metricsPHP/template.php",
+                            url: "metricsPHP/metricsEZSQL.php",
                             data: {type: "genTimeProb"},
                             success: function(data){
                                 console.log(data);

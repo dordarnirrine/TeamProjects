@@ -234,7 +234,7 @@
                          //Get data from php
                         $.ajax({
                             type: "POST",
-                            url: "metricsPHP/template.php",
+                            url: "metricsPHP/metricsEZSQL.php",
                             data: {type: "specNumProb"},
                             success: function(data){
                                 console.log(data);
@@ -274,7 +274,7 @@
                         
                         $.ajax({
                             type: "POST",
-                            url: "metricsPHP/template.php",
+                            url: "metricsPHP/metricsEZSQL.php",
                             data: {type: "specProbTime"},
                             success: function(data){
                                 console.log(data);
