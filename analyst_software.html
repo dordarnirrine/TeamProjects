@@ -77,7 +77,7 @@
 
 
 
-    <body onload="setMetricData()">
+    <body onload="setSoftwareData()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -90,13 +90,14 @@
                 <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
                 <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
                 <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
-                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
             <div id="sidebar-footer">
                 <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
             </div>
         </div>
+        
         <div id="content">
             <div id="content-main">
 
@@ -108,20 +109,12 @@
 
                 <div id="ChooseSoftPanel">
                     <h4><u>Choose Software</u></h4>
-                    <select id ="chosenSoftware">
-                        <option value="windows10">Windows 10</option>
-                        <option value="windows9">Windows Vista</option>
-                        <option value="softwarev43">Mac OS X</option>
-                        <option value="other23">Ubuntu</option>
-                        <option value="other23">Word Processing</option>
-                        <option value="other23">Microsoft Excel</option>
-                    </select>
+                    <select id ="chosenSoftware"></select>
                     <ul id="SoftInfo">
-                       <li>Name: <strong>Windows 10</strong></li>
-                       <li>Type of software: <strong>Operating System</strong></li>
-                       <li>Number of Staff Using: <strong>52</strong></li>
-                       <li>Number of Current Problems <strong>3</strong></li>
-                       <li>Total Number Of Problems: <strong>22</strong></li>
+                       <li id="softName"></li>
+                       <li id="softType"></li>
+                       <li id="numOfStaff"></li>
+                       <li id="numOfCurrentProbs"></li>
                     </ul>
                 </div>
                 
@@ -184,7 +177,6 @@
                             text: 'Total Number of Problems'
                         }
                     }
-
                 });
         </script>
 
@@ -195,7 +187,7 @@
            
 
             $("#chosenSoftware").change(function() {
-                setSoftwareData($(this).find('option:selected').text());
+                changeSoftwareData($(this).find('option:selected').text());
                 setMetricData();
             });
 
@@ -205,9 +197,43 @@
             });
 
 
+            //on load
+            function setSoftwareData() {
+                $.ajax({
+                    type:"POST",
+                    url:"metricsPHP/softInfo.php",
+                    success:function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                        for(var i=0; i<data.length; i++){
+                            $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
+                        }
+                        
+                        $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
+                        $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
+                        $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
+                        $("#numOfCurrentProbs").html();
+                        
+                    }
 
-            function setSoftwareData(chosenSoftware) {
-                
+                });
+            }
+
+
+            function changeSoftwareData(chosenSoftware){
+                $.ajax({
+                    type:"POST",
+                    url:"metricsPHP/changeSoftData.php",
+                    data:{chosenSoftware:chosenSoftware},
+                    success:function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                        $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
+                        $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
+                        $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
+                        $("#numOfCurrentProbs").html();
+                    }
+                });
             }
 
 

@@ -69,10 +69,7 @@
     </head>
     
 
-
-
-
-    <body onload="setChartShown()">
+    <body onload="setSpecOptions()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -85,13 +82,14 @@
                 <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
                 <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
                 <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
-                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
             <div id="sidebar-footer">
                 <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
             </div>
         </div>
+
         <div id="content">
             <div id="content-main">
                 
@@ -105,27 +103,18 @@
                    <h4><u>Specialist</u></h4>
 
                     <select id="specList">
-                        <option value="Angel Wallace" id="1">Angel Wallace </option>
-                        <option value="Irvin  Cruz" id="2">Irvin  Cruz</option>
-                        <option value="Grant  Santos" id="3">Grant  Santos</option>
-                        <option value="Faye   Sandoval" id="4">Faye Sandoval</option>
-                        <option value="Ora Rodgers" id="5">Ora Rodgers</option>
-                        <option value="Charlie Reeves" id="6">Charlie Reeves</option>
-                        <option value="Jenna Miles" id="7">Jenna Miles</option>
+                        
                     </select>
 
                     <ul id="SpecInfo">
-                        <li id="specName">Name: <strong>Angel Wallace</strong></li>
-                        <li id="specAge">Age: <strong>32</strong></li>
-                        <li id="specID">Staff ID: <strong>H2H5821</strong></li>
-                        <li id="specTime">Average Time To Find Solution: <strong>11 days, 12 Hours</strong></li>
-                        <li id="specNoProbs">Number of Current Problems: <strong>4</strong></li>
-                        <li id="specSols">Number of Solved Problems: <strong>42</strong></li>
+                        <li id="specName"></li>
+                        <li id="specAge"></li>
+                        <li id="specID"></li>
+                        <li id="specTime"></li>
+                        <li id="specNoProbs"></li>
+                        <li id="specSols"></li>
                         <li>Areas of Expertise:
-                            <ul>
-                                <li id="spec1"><strong>Printing</strong></li>
-                                <li id="spec2"><strong>Networking</strong></li>
-                                </ul>
+                            <ul></ul>
                         </li>
                     </ul>
                     
@@ -153,6 +142,7 @@
 
 
         <script>
+
             var timeToSolChart = new Chart(document.getElementById("canvas"), {
                             type: 'bar',
                             data: {
@@ -172,7 +162,7 @@
                                     text: 'Time To Find Solution'
                                 }       
                             }
-                        });    //end of draw chart
+            });    //end of draw chart
 
             var probTimeChart = new Chart(document.getElementById("canvas"), {
                 type: 'line',
@@ -194,34 +184,67 @@
                         }
                     }
             });
+
         </script>
 
-
-
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         
+
         <script type="text/javascript">
             
-            //different specialist chosen
-            $("#specList").change(function() {
-                var selectedSpec = $(this).find('option:selected').text();
-                setSpecData($(this).find('option:selected').text());
-            });
-
-
-            //different graph chosen
-
             $("#analyticsChoice").change(function() {
                var chosenMetric = $(this).find('option:selected').text();
                setChartShown($(this).find('option:selected').text());
-            });            
+            });   
+
+
+            $("#specList").change(function(){
+                var chosenSpec = $(this).find('option:selected').text();
+                setInfoToChosen(chosenSpec);
+            });
 
 
 
-            function setSpecData(selectedSpec) {
-                $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
+            function setSpecOptions() {
+                $.ajax({
+                    type:"POST",
+                    url:"metricsPHP/specInfo.php",
+                    success:function(data){
+                        data=JSON.parse(data);
+    
+                        for(var i=0;i<data.length;i++){
+                            $("#specList").append("<option>"+data[i].Name+"</option>");
+                        }
+
+                        $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
+                        $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
+                        $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
+                        $("#specNoProbs").html("Number of Problems: <strong>"+data[0].NumOfProblems+"</strong>")
+                    }
+                });
                 setChartShown();
             }
+
+
+
+            function setInfoToChosen(chosenSpecialist){
+                if(!chosenSpecialist) chosenSpecialist=document.getElementById("specList").value;
+
+                $.ajax({
+                    type:"POST",
+                    url:"metricsPHP/changeSpecData.php",
+                    data:{chosenSpecialist:chosenSpecialist},
+                    success:function(data){
+                        data=JSON.parse(data);
+                        console.log(data[0]);
+                        $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
+                        $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
+                        $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
+                        $("#specNoProbs").html("Number of Problems: <strong>"+data[0].NumOfProblems+"</strong>")
+                    }
+                });
+            }
+
 
 
             function setChartShown(chosenMetric) {

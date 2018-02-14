@@ -77,7 +77,7 @@
 
 
 
-    <body onload="setMetricData()">
+    <body onload="setEquipToChoose()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -90,13 +90,15 @@
                 <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
                 <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
                 <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
-                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
             <div id="sidebar-footer">
                 <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
             </div>
         </div>
+        
+
         <div id="content">
             <div id="content-main">
                 
@@ -105,38 +107,31 @@
                     <hr style="color: #EEEEEE; border-width: 2px">
                 </div>
 
-              
-
-
                 <div id="ChooseEquip">
                     <h4><u>Equipment</u></h4>
                     
                     <ul id="EquipInfo">
-                        <select id="chosenEquip">
-                            <option value="printer">HP Deskjet 3636</option>
-                            <option value="scanner">Fujitsu ScanSnap S1300i</option>
-                            <option value="desktop">HP 260-a104na</option>
-                            <option value="phone">Mitel 5324</option>
-                    
-                        </select >
-                        <li id ="Make">Make: <strong>Mitel</strong></li>
-                        <li id="Model">Model: <strong>5324</strong></li>
-                        <li id="EquipType">Equipment Type: <strong>Phone</strong></li>
-                        <li id="CurrentProbs">Number Of Current Problems: <strong>7</strong></li>
+                        <select id="chosenEquip"></select >
+
+                        <li id ="Make"></li>
+                        <li id="Model"></strong></li>
+                        <li id="EquipType"></li>
+                        <li id="CurrentProbs"></li>
                         
                     </ul>
-
                 </div>
+
 
                 <div id="EquipmentAnalytics">
                     <h4><u>Specialist Analytics</u></h4>
                     <select id="equipmentMetric">
                         <option value="Comparison of Number of Problems">Comparison of Number of Problems</option> 
                         <option value="Number Of Problems / Time">Number Of Problems / Time</option>
-                       
                     </select>
+
                     <canvas id="canvas" ></canvas>
                 </div>
+
 
                 <script src="Chart.min.js"></script>
                 <script>
@@ -181,10 +176,11 @@
                                     text: 'Total Number of Problems'
                                 }
                             }
+                });       
 
-                        });       
 
-        </script>
+                </script>
+
             </div>
         </div>
 
@@ -200,16 +196,54 @@
             });
 
 
+
             $("#equipmentMetric").change(function() {
                 setMetricData($(this).find('option:selected').text());
             });
 
 
 
-            function setEquipData(chosenEquip) {
-                $('#specName').html("Name: <strong>" + chosenEquip + "</strong>");
-                setMetricData();
+            function setEquipToChoose(){
+                $.ajax({
+                    type: "POST",
+                    url: "metricsPHP/equipInfo.php",
+                    success:function(data){
+                        data = JSON.parse(data); 
+                        for(var i=0; i<data.length;i++){
+                            $("#chosenEquip").append("<option>"+data[i].Make+"-"+data[i].Model+"</option>");
+                        }
+
+                        $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
+                        $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
+                        $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
+
+                    }
+                });
+                setEquipData();
             }
+
+
+
+            function setEquipData(chosenEquip) {
+                if(!chosenEquip) chosenEquip = document.getElementById("chosenEquip").value;
+                console.log(chosenEquip);
+                var make = chosenEquip.split("-")[0];
+                var model = chosenEquip.split("-")[1];
+                             
+                $.ajax({
+                    type:"POST",
+                    url:"metricsPHP/chosenEquipInfo.php",
+                    data: {make:make, model:model},
+                    success:function(data){
+                        data = JSON.parse(data);
+                        $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
+                        $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
+                        $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
+                    }
+                });
+                
+            }
+
 
 
             function setMetricData(selectedMetric){
@@ -289,10 +323,7 @@
                                     }
                                 });    //end of draw numOfProbChart                     
                             }
-                        }) //end of ajax
-
-                            
-
+                        }) //end of ajax   
                     }
                 }
             }
