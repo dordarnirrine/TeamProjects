@@ -190,7 +190,8 @@
         
 
         <script type="text/javascript">
-            
+           
+
             $("#analyticsChoice").change(function() {
                var chosenMetric = $(this).find('option:selected').text();
                setChartShown($(this).find('option:selected').text());
@@ -207,7 +208,7 @@
             function setSpecOptions() {
                 $.post("metricsPHP/specInfo.php",function(data){
                     data=JSON.parse(data);
-                    console.log(data);
+                    
                     for(var i=0;i<data.length;i++){
                         $("#specList").append("<option>"+data[i].Name+"</option>");
                     }
@@ -219,7 +220,7 @@
 
 
             function setInfoToChosen(chosenSpecialist){
-                console.log("test");
+               
                 if(!chosenSpecialist) chosenSpecialist=document.getElementById("specList").value;
                 
                 $.post("metricsPHP/changeSpecData.php",{chosenSpecialist:chosenSpecialist}, function(data){
@@ -231,6 +232,7 @@
                     for(var x=0; x<data.length;x++){
                         $("#specExpertise").append("<li><strong>"+data[x].ProbType+"</strong></li>");
                     }
+
                 });
 
                 $.post("metricsPHP/specNoOfProbs.php",{chosenSpecialist:chosenSpecialist}, function(data){
@@ -241,9 +243,10 @@
                 
                 $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:chosenSpecialist},function(data){
                     data = JSON.parse(data);
-                    console.log(data[0].AVERAGE);
                     $("#specTime").html("Average Time To Sol: <strong>"+data[0].AVERAGE+" months </strong>");
+                    setChartShown();
                 });
+
                 
             }
 
@@ -251,6 +254,8 @@
 
             function setChartShown(chosenMetric) {
                 if(!chosenMetric) chosenMetric = document.getElementById("analyticsChoice").value;
+                var spec1 = document.getElementById("specList").value;
+
                 if (chosenMetric == "Number Of Problems / Time") {
                     
                     if(timeToSolChart) {
@@ -262,7 +267,7 @@
                             url: "metricsPHP/metricsEZSQL.php",
                             data: {type: "specNumProb"},
                             success: function(data){
-                                console.log(data);
+                          
                                 //draw the chart
                                 probTimeChart = new Chart(document.getElementById("canvas"), {
                                     type: 'line',
@@ -287,8 +292,6 @@
                             }
                         });
 
-                        
-
                     }
 
                 } else {
@@ -296,39 +299,67 @@
                     if(probTimeChart) {
                        probTimeChart.destroy();
                         //draw the time to sol chart
+                        var avg;
+                        var max=0;
+                        var min=Math.pow(10, 1000);
+                        var specialistList = document.getElementById('specList');
                         
-                        $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/metricsEZSQL.php",
-                            data: {type: "specProbTime"},
-                            success: function(data){
-                                console.log(data);
+                        for(var k=0;k<specialistList.length;k++) {
+                            $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:specialistList[k].value},function(data){
                                 
-                                timeToSolChart = new Chart(document.getElementById("canvas"), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ["Lowest", "Angel Wallace", "Highest"],
-                                        datasets: [
-                                        {
-                                            label: "Time To Find Solution",
-                                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
-                                            data: [1,3,12]
-                                        }
-                                        ]
-                                    },
-                                    options: {
-                                        legend: { display: false },
-                                        title: {
-                                            display: true,
-                                            text: 'Time To Find Solution'
-                                        }       
-                                    }
-                                });    //end of draw chart
+                                data = JSON.parse(data);
 
-                            }
-                        });
+                                if(data[0].AVERAGE < min & data[0].AVERAGE){
+                                    min = data[0].AVERAGE;
+                                }
+
+                                if(data[0].AVERAGE > max){
+                                    max = data[0].AVERAGE;
+                                }
+                                
+                                $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:document.getElementById('specList').value},function(averageTime){
+                                    data = JSON.parse(averageTime)
+                                    avg = data[0].AVERAGE;
+                                    updateGraph(min,max,avg);
+                                });
+
+                                
+                            });
+                        }
                     }
                 } 
+
+
+                function updateGraph(min, max, avg){
+                    console.log(avg);
+                    timeToSolChart = new Chart(document.getElementById("canvas"), {
+                        type: 'bar',
+                        data: {
+                            labels: ["Lowest", document.getElementById("specList").value, "Highest"],
+                            datasets: [
+                            {
+                                label: "Time To Find Solution",
+                                backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
+                                data: [min,avg,max]
+                            }
+                            ]
+                        },
+                        options: {
+                            scales:{
+                                yAxes:[{
+                                    ticks:{
+                                        suggestedMin: 0
+                                    }
+                                }]
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Time To Find Solution'
+                            }       
+                        }
+                    });    //end of draw chart
+                }
 
             }
 
