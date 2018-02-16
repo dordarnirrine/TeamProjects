@@ -112,9 +112,8 @@
                         <li id="specID"></li>
                         <li id="specTime"></li>
                         <li id="specNoProbs"></li>
-                        <li id="specSols"></li>
-                        <li>Areas of Expertise:
-                            <ul></ul>
+                        <li id="specExpertise">Areas of Expertise:
+                            
                         </li>
                     </ul>
                     
@@ -144,24 +143,24 @@
         <script>
 
             var timeToSolChart = new Chart(document.getElementById("canvas"), {
-                            type: 'bar',
-                            data: {
-                                labels: ["Lowest", "Angel Wallace", "Highest"],
-                                datasets: [
-                                {
-                                    label: "Time To Find Solution",
-                                    backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
-                                    data: [1,3,12]
-                                }
-                                ]
-                            },
-                            options: {
-                                legend: { display: false },
-                                title: {
-                                    display: true,
-                                    text: 'Time To Find Solution'
-                                }       
-                            }
+                type: 'bar',
+                data: {
+                    labels: ["Lowest", "Angel Wallace", "Highest"],
+                    datasets: [
+                    {
+                        label: "Time To Find Solution",
+                        backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
+                        data: [1,3,12]
+                    }
+                    ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Time To Find Solution'
+                    }       
+                }
             });    //end of draw chart
 
             var probTimeChart = new Chart(document.getElementById("canvas"), {
@@ -206,43 +205,46 @@
 
 
             function setSpecOptions() {
-                $.ajax({
-                    type:"POST",
-                    url:"metricsPHP/specInfo.php",
-                    success:function(data){
-                        data=JSON.parse(data);
-    
-                        for(var i=0;i<data.length;i++){
-                            $("#specList").append("<option>"+data[i].Name+"</option>");
-                        }
-
-                        $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
-                        $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
-                        $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
-                        $("#specNoProbs").html("Number of Problems: <strong>"+data[0].NumOfProblems+"</strong>")
+                $.post("metricsPHP/specInfo.php",function(data){
+                    data=JSON.parse(data);
+                    console.log(data);
+                    for(var i=0;i<data.length;i++){
+                        $("#specList").append("<option>"+data[i].Name+"</option>");
                     }
+                    setInfoToChosen();
+                    setChartShown();
                 });
-                setChartShown();
             }
 
 
 
             function setInfoToChosen(chosenSpecialist){
+                console.log("test");
                 if(!chosenSpecialist) chosenSpecialist=document.getElementById("specList").value;
-
-                $.ajax({
-                    type:"POST",
-                    url:"metricsPHP/changeSpecData.php",
-                    data:{chosenSpecialist:chosenSpecialist},
-                    success:function(data){
-                        data=JSON.parse(data);
-                        console.log(data[0]);
-                        $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
-                        $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
-                        $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
-                        $("#specNoProbs").html("Number of Problems: <strong>"+data[0].NumOfProblems+"</strong>")
+                
+                $.post("metricsPHP/changeSpecData.php",{chosenSpecialist:chosenSpecialist}, function(data){
+                    data=JSON.parse(data);
+                    $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
+                    $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
+                    $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
+                    $("#specExpertise").html("Areas of Expertise:");
+                    for(var x=0; x<data.length;x++){
+                        $("#specExpertise").append("<li><strong>"+data[x].ProbType+"</strong></li>");
                     }
                 });
+
+                $.post("metricsPHP/specNoOfProbs.php",{chosenSpecialist:chosenSpecialist}, function(data){
+                    data = JSON.parse(data);
+                    $("#specNoProbs").html("Number Of Problems: <strong>"+data[0].total+"</strong>");
+                });
+
+                
+                $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:chosenSpecialist},function(data){
+                    data = JSON.parse(data);
+                    console.log(data[0].AVERAGE);
+                    $("#specTime").html("Average Time To Sol: <strong>"+data[0].AVERAGE+" months </strong>");
+                });
+                
             }
 
 

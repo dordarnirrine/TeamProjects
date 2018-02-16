@@ -116,7 +116,7 @@
                         <li id ="Make"></li>
                         <li id="Model"></strong></li>
                         <li id="EquipType"></li>
-                        <li id="CurrentProbs"></li>
+                        <li id="NoOfProblems"></li>
                         
                     </ul>
                 </div>
@@ -204,22 +204,14 @@
 
 
             function setEquipToChoose(){
-                $.ajax({
-                    type: "POST",
-                    url: "metricsPHP/equipInfo.php",
-                    success:function(data){
-                        data = JSON.parse(data); 
-                        for(var i=0; i<data.length;i++){
-                            $("#chosenEquip").append("<option>"+data[i].Make+"-"+data[i].Model+"</option>");
-                        }
-
-                        $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
-                        $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
-                        $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
-
+               $.post("metricsPHP/equipInfo.php",function(data){
+                    data = JSON.parse(data); 
+                    for(var i=0; i<data.length;i++){
+                        $("#chosenEquip").append("<option>"+data[i].Make+"-"+data[i].Model+"</option>");
                     }
+                    setEquipData();
+                    
                 });
-                setEquipData();
             }
 
 
@@ -229,17 +221,18 @@
                 console.log(chosenEquip);
                 var make = chosenEquip.split("-")[0];
                 var model = chosenEquip.split("-")[1];
-                             
-                $.ajax({
-                    type:"POST",
-                    url:"metricsPHP/chosenEquipInfo.php",
-                    data: {make:make, model:model},
-                    success:function(data){
-                        data = JSON.parse(data);
-                        $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
-                        $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
-                        $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
-                    }
+
+                $.post("metricsPHP/chosenEquipInfo.php",{make:make, model:model},function(data){
+                    data = JSON.parse(data);
+                    $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
+                    $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
+                    $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
+                });
+
+                $.post("metricsPHP/equipNoOfProbs.php",{make:make, model:model},function(data){
+                    data = JSON.parse(data);
+                    console.log(data[0].total);
+                    $("#NoOfProblems").html("Number Of Problems: <strong>"+data[0].total+"</strong>");
                 });
                 
             }

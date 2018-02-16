@@ -199,40 +199,32 @@
 
             //on load
             function setSoftwareData() {
-                $.ajax({
-                    type:"POST",
-                    url:"metricsPHP/softInfo.php",
-                    success:function(data){
-                        data = JSON.parse(data);
-                        console.log(data);
-                        for(var i=0; i<data.length; i++){
-                            $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
-                        }
-                        
-                        $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
-                        $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
-                        $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
-                        $("#numOfCurrentProbs").html();
-                        
+                $.post("metricsPHP/softInfo.php", function(data){
+                    data = JSON.parse(data);
+                    console.log(data);
+                    for(var i=0; i<data.length; i++){
+                        $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
                     }
-
+                        
+                    changeSoftwareData(data[0].Name);
                 });
             }
 
 
             function changeSoftwareData(chosenSoftware){
-                $.ajax({
-                    type:"POST",
-                    url:"metricsPHP/changeSoftData.php",
-                    data:{chosenSoftware:chosenSoftware},
-                    success:function(data){
-                        data = JSON.parse(data);
-                        console.log(data);
-                        $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
-                        $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
-                        $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
-                        $("#numOfCurrentProbs").html();
-                    }
+                if(!chosenSoftware) chosenSoftware = document.getElementById("chosenSoftware").value
+                $.post("metricsPHP/changeSoftData.php",{chosenSoftware:chosenSoftware},function(data){
+                    data = JSON.parse(data);
+                    console.log(data);
+                    $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
+                    $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
+                    $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
+                });
+                
+                $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(data){
+                    data = JSON.parse(data);
+                    console.log(data[0].total);
+                    $("#numOfCurrentProbs").html("Number Of Problems: <strong>"+data[0].total+"</strong>")
                 });
             }
 
