@@ -158,18 +158,10 @@
                         }
                 });
 
+
                 var numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
-                    data: {
-                        labels: ["Highest", "Chosen Software", "Lowest"],
-                        datasets: [
-                        {
-                            label: "Total Number of Problems",
-                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                            data: [13,12,1]
-                        }
-                        ]
-                    },
+                    
                     options: {
                         legend: { display: false },
                         title: {
@@ -201,7 +193,6 @@
             function setSoftwareData() {
                 $.post("metricsPHP/softInfo.php", function(data){
                     data = JSON.parse(data);
-                    console.log(data);
                     for(var i=0; i<data.length; i++){
                         $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
                     }
@@ -212,62 +203,53 @@
 
 
             function changeSoftwareData(chosenSoftware){
-                if(!chosenSoftware) chosenSoftware = document.getElementById("chosenSoftware").value
+                if(!chosenSoftware) chosenSoftware = document.getElementById("chosenSoftware").value;
                 $.post("metricsPHP/changeSoftData.php",{chosenSoftware:chosenSoftware},function(data){
                     data = JSON.parse(data);
-                    console.log(data);
+                    
                     $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
                     $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
                     $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
                 });
                 
                 $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(data){
-                    data = JSON.parse(data);
-                    console.log(data[0].total);
-                    $("#numOfCurrentProbs").html("Number Of Problems: <strong>"+data[0].total+"</strong>")
+                    $("#numOfCurrentProbs").html("Number Of Problems: <strong>"+data+"</strong>")
                 });
+                setMetricData();
             }
 
 
             function setMetricData(selectedMetric){
                 if(!selectedMetric) selectedMetric = document.getElementById("softwareMetric").value;
-
+                var chosenSoftware = document.getElementById("chosenSoftware").value;
+                
                 if (selectedMetric == "Comparison of Number of Problems") {
                     if(probTimeChart) {
                         probTimeChart.destroy();
+                        var softProbs;
+                        var max=0;
+                        var min=Math.pow(10,1000);
+                        var softList = document.getElementById('chosenSoftware');
 
-                         $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/metricsEZSQL.php",
-                            data: {type: "softNumProb"},
-                            success: function(data){
+                        for(var k=0; k<softList.length;k++){
+                            var soft = softList[k].value;
+                            $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:soft}, function(data){
+                                if(data<min & data){
+                                    min=data;
+                                }
 
-                                //draw numOfProbChart
-                                console.log(data);
-                                numOfProbChart = new Chart(document.getElementById("canvas"), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ["Highest", "Chosen Software", "Lowest"],
-                                        datasets: [
-                                        {
-                                            label: "Total Number of Problems",
-                                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                                            data: [13,12,1]
-                                        }
-                                        ]
-                                    },
-                                    options: {
-                                        legend: { display: false },
-                                        title: {
-                                            display: true,
-                                            text: 'Total Number of Problems'
-                                        }
-                                    }
+                                if(data>max&data){
+                                    max=data;
+                                }
+                               
 
-                                }); //closes chart drawing   
-                            }
+                                $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(probSoft){
+                                    console.log(min,probSoft,max);
+                                    updateGraph(min,probSoft,max);
+                                })
+                            })
+                        }
 
-                        });   //closes ajax function
                     }
                 } else {
 
@@ -282,7 +264,6 @@
                             success: function(data){
 
                                 //draw numOfProbChart
-                                console.log(data);
                                 probTimeChart = new Chart(document.getElementById("canvas"), {
                                     type: 'line',
                                     data: {
@@ -310,6 +291,38 @@
 
                     }
                 }
+            }
+
+
+            function updateGraph(min, soft, max){
+                numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Highest","Chosen Software","Lowest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [min,soft,max]
+                        }
+                        ]
+                    },
+                    options: {
+                        scales:{
+                            yAxes:[{
+                                ticks:{
+                                    suggestedMin: 0
+                                 }
+                             }]
+                        },
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                }); //end of draw chart
             }
         
 
