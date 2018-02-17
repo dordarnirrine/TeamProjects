@@ -112,7 +112,7 @@
                 <p> Choose What Data you Wish to View: 
                 <select id="chartSelect">
                     <option>View "Backlog" Data</option>
-                    <option>View "Average Time to Find Solution" Data</option>
+                    <option>View "Problems for Problem Types" Data</option>
                     
                 </select>
 
@@ -136,20 +136,12 @@
         <script>
          
         var timeChart = new Chart(document.getElementById("canvas"), {
-            type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6],
-                    datasets: [{ 
-                    data: [12,13,15,17,23,12],
-                    label: "Time To Find Solution",
-                    borderColor: "#3e95cd",
-                    fill: false
-                    }]
-                },
+            type: 'pie',
+                
                 options: {
                 title: {
                     display: true,
-                    text: 'Time to Find Solution Chart',
+                    text: 'Problem Type and Problem Chart',
                     responsive: true,
                 }
             }
@@ -243,42 +235,47 @@
                 } else {
                     if (backlogChart) {
                         backlogChart.destroy();
-
-                        $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/metricsEZSQL.php",
-                            data: {type: "genTimeProb"},
-                            success: function(data){
-                                console.log(data);
-                                timeChart = new Chart(document.getElementById("canvas"), {  //draw time chart
-                                    type: 'line',
-                                    data: {
-                                        labels: [1,2,3,4,5,6],
-                                        datasets: [{ 
-                                            data: [12,13,15,17,23,12],
-                                            label: "Time To Find Solution",
-                                            borderColor: "#3e95cd",
-                                            fill: false
-                                        }]
-                                    },
-                                    options: {
-                                        title: {
-                                            display: true,
-                                            text: 'Time to Find Solution Chart',
-                                            responsive: true,
-                                        }
-                                    }
-                                }); //end of draw time chart
-    
-                            }
-
-                        })
-
+                        updatePieChart();
                     }
                 }
             }
 
 
+
+            function updatePieChart(){
+                var labelArray=[];
+                var dataArray=[];
+
+                $.post("metricsPHP/probTypeNum.php", function(probTypeData){
+                    probTypeData = JSON.parse(probTypeData);
+                    for(var i=0; i<probTypeData.length;i++){
+                        labelArray.push(probTypeData[i].ProbType);
+                        dataArray.push(probTypeData[i].ProbNumCount);
+                    }
+                    
+                    console.log(labelArray);
+                    console.log(dataArray);
+
+                    timeChart = new Chart(document.getElementById("canvas"), {
+                        type: 'pie',
+                        data :{
+                            labels: labelArray,
+                            datasets:[{
+                                data:dataArray,
+                                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Problem Type and Problem Chart',
+                                responsive: true,
+                            }
+                        }
+                    }); 
+
+                });
+            }
 
             </script>
     </body>
