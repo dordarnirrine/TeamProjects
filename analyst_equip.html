@@ -135,7 +135,7 @@
 
                 <script src="Chart.min.js"></script>
                 <script>
-
+                
                 var probTimeChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     data: {
@@ -159,16 +159,7 @@
 
                 var numOfProbChart = new Chart(document.getElementById("canvas"), {
                             type: 'bar',
-                            data: {
-                                labels: ["Highest","Chosen Equipment","Lowest"],
-                                datasets: [
-                                {
-                                    label: "Total Number of Problems",
-                                    backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                                    data: [15,2,1]
-                                }
-                                ]
-                            },
+
                             options: {
                                 legend: { display: false },
                                 title: {
@@ -177,7 +168,7 @@
                                 }
                             }
                 });       
-
+                
 
                 </script>
 
@@ -230,10 +221,9 @@
                 });
 
                 $.post("metricsPHP/equipNoOfProbs.php",{make:make, model:model},function(data){
-                    data = JSON.parse(data);
-                    console.log(data[0].total);
-                    $("#NoOfProblems").html("Number Of Problems: <strong>"+data[0].total+"</strong>");
+                    $("#NoOfProblems").html("Number Of Problems: <strong>"+data+"</strong>");
                 });
+                setMetricData();
                 
             }
 
@@ -241,46 +231,37 @@
 
             function setMetricData(selectedMetric){
                 if(!selectedMetric) selectedMetric = document.getElementById("equipmentMetric").value;
-              
+                if(!chosenEquip) chosenEquip = document.getElementById("chosenEquip").value;
+                
+
                 if (selectedMetric == "Comparison of Number of Problems") {
                     if(probTimeChart) {
                         probTimeChart.destroy();
+                        var equipProbs;
+                        var max=0;
+                        var min=Math.pow(10,1000);
+                        var equipList = document.getElementById('chosenEquip');
 
-                        $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/metricsEZSQL.php",
-                            data: {type: "equipNumProb"},
-                            success: function(data){
-
-                                //draw numOfProbChart
+                        for(var k=0; k<equipList.length;k++){
+                            var equip = equipList[k].value;
+                            var make = equip.split("-")[0];
+                            var model = equip.split("-")[1];
+                            $.post("metricsPHP/equipNoOfProbs.php",{make:make,model:model}, function(data){
                                 console.log(data);
-                                
-                                numOfProbChart = new Chart(document.getElementById("canvas"), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ["Highest","Chosen Equipment","Lowest"],
-                                        datasets: [
-                                        {
-                                            label: "Total Number of Problems",
-                                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
-                                            data: [15,2,1]
-                                        }
-                                        ]
-                                    },
-                                    options: {
-                                        legend: { display: false },
-                                        title: {
-                                            display: true,
-                                            text: 'Total Number of Problems'
-                                        }
-                                    }
+                                if(data<min & data){
+                                    min = data;
+                                }
+                                if(data>max & data){
+                                    max = data;
+                                }
+                                $.post("metricsPHP/equipNoOfProbs.php",{make:make, model:model},function(equipChosenProbs){
+                                    equipProbs=equipChosenProbs;
+                                    updateGraph(min,equipProbs,max);
+                                });
+                            });
+                        }
 
-                                }); //end of draw chart
-                            }
-                        })  //end of ajax
-
-
-                               
+                       
 
                     }
 
@@ -321,6 +302,39 @@
                 }
             }
 
+
+            function updateGraph(min, prob, max){
+                
+                numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Highest","Chosen Equipment","Lowest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [min,prob,max]
+                        }
+                        ]
+                    },
+                    options: {
+                        scales:{
+                            yAxes:[{
+                                ticks:{
+                                    suggestedMin: 0
+                                 }
+                             }]
+                        },
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                }); //end of draw chart
+            }
+               
 
         </script>
     </body>
