@@ -72,30 +72,33 @@
           <form action="EditTicket-Query.php">
             <div class="form-group">
                 <label for="ProblemID">ProblemID:</label>
-                <input type="id" class="form-control" id="id">
+                <input type="id" class="form-control" id="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="CallerName">Caller Name:</label>
-                <input type="callername" class="form-control" id="callername">
+                <input type="callername" class="form-control" id="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="Description">Description of Problem:</label>
-                <textarea type="desc" class="form-control" id="desc"> </textarea>
+                <textarea type="desc" class="form-control" id="desc"> <?php if(isset($_GET["desc"])){echo $_GET["desc"];}; ?> </textarea>
             </div>
             <div class="form-group">
                 <label for="CallbackNum">Callback Number:</label>
-                <input type="callbacknum" class="form-control" id="callbacknum" name="callbacknum">
+                <input type="callbacknum" class="form-control" id="callbacknum" name="callbacknum" value=<?php if(isset($_GET["callbacknum"])){echo $_GET["callbacknum"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="CallbackReason">Reason for Callback:</label>
-                <input type="callback" class="form-control" id="callback">
+                <input type="callback" class="form-control" id="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="ProblemType">Problem Type:</label>
-                <select type="problemtype" class="form-control" id="problemtype">
+                <select type="problemtype" class="form-control" id="problemtype" <?php if(isset($_GET["type"])){echo $_GET["type"];}; ?>>
                     <?php
                         // getProblemTypes
-                        $res = '[{"ProblemType":"Hardware"},{"ProblemType":"Networking"},{"ProblemType":"Printing"},{"ProblemType":"Software"}]';
+                        ob_flush();
+                        ob_start();
+                        include "metricsPHP/getProblemTypes.php";
+                        $res = ob_get_clean();
                         $res = json_decode($res, true);
 
                         foreach($res as $type){
@@ -108,9 +111,10 @@
                 <label for="AssignedSpec">Assigned Specialist:</label>
                 <select type="assignedspec" class="form-control" id="assignedspec">
                     <?php
-                        // specInfo.php
-                        $res = '[{"SpecilailistID":"1","NumOfProblems":"2","Name":"Jeff Bezos","Age":"42"},{"SpecilailistID":"2","NumOfProblems":"1","Name":"Bill Gates","Age":"62"},{"SpecilailistID":"3","NumOfProblems":"3","Name":"Sergey Bin","Age":"34"},{"SpecilailistID":"4","NumOfProblems":"4","Name":"Steve Jobs","Age":"27"},{"SpecilailistID":"5","NumOfProblems":"2","Name":"Elon Musk","Age":"41"}]';
-                                            
+                        ob_flush();
+                        ob_start();
+                        include "metricsPHP/specInfo.php";
+                        $res = ob_get_clean();            
                         $res = (json_decode($res, true));
 
                         foreach($res as $spec){
@@ -121,7 +125,7 @@
             </div>      
             <div class="form-group">
                 <label for="Solution">Solution:</label>
-                <textarea type="solution" class="form-control" id="solution"> </textarea>
+                <textarea type="solution" class="form-control" id="solution"> <?php if(isset($_GET["sol"])){echo $_GET["sol"];}; ?> </textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>   
