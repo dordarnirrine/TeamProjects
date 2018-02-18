@@ -77,7 +77,7 @@
 
 
 
-    <body>
+    <body onload="setSoftwareData()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -90,13 +90,14 @@
                 <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
                 <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
                 <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
-                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
             <div id="sidebar-footer">
                 <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
             </div>
         </div>
+        
         <div id="content">
             <div id="content-main">
 
@@ -108,20 +109,12 @@
 
                 <div id="ChooseSoftPanel">
                     <h4><u>Choose Software</u></h4>
-                    <select id ="chosenSoftware">
-                        <option value="windows10">Windows 10</option>
-                        <option value="windows9">Windows Vista</option>
-                        <option value="softwarev43">Mac OS X</option>
-                        <option value="other23">Ubuntu</option>
-                        <option value="other23">Word Processing</option>
-                        <option value="other23">Microsoft Excel</option>
-                    </select>
+                    <select id ="chosenSoftware"></select>
                     <ul id="SoftInfo">
-                       <li>Name: <strong>Windows 10</strong></li>
-                       <li>Type of software: <strong>Operating System</strong></li>
-                       <li>Number of Staff Using: <strong>52</strong></li>
-                       <li>Number of Current Problems <strong>3</strong></li>
-                       <li>Total Number Of Problems: <strong>22</strong></li>
+                       <li id="softName"></li>
+                       <li id="softType"></li>
+                       <li id="numOfStaff"></li>
+                       <li id="numOfCurrentProbs"></li>
                     </ul>
                 </div>
                 
@@ -129,11 +122,10 @@
                 <div id="SoftwarePanel">
                     <h4><u>Software Analytics</u></h4>
                     <select id="softwareMetric">
-                        <option>Comparison of OS</option>
-                        <option>Number Of Current Problems</option>
-                        <option>Problems / Time</option>
+                        <option value="Comparison of Number of Problems">Comparison of Number of Problems</option>
+                        <option value="Problems / Time">Problems / Time</option>
                     </select>
-                    <canvas id="pie-chart" width="800" height="450"></canvas>
+                    <canvas id="canvas" width="800" height="450"></canvas>
 
                 </div>
 
@@ -145,23 +137,39 @@
 
         <script src="Chart.min.js"></script>
         <script>
-        new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: ["Windows 10", "Windows Vista", "Mac OS X", "Ubuntu"],
-            datasets: [{
-                label: "Population (millions)",
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                data: [52,42,36,5]
-            }]
-            },
-            options: {
-            title: {
-                display: true,
-                text: 'Comparision of Operating System Usage'
-            }
-            }
-        });
+                var probTimeChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5],
+                        datasets: [{ 
+                            data: [12,8,1,6,1],
+                            label: "Equipment",
+                            borderColor: "#3e95cd",
+                            fill: false
+   
+                        }
+                        ]           
+                    },
+                            options: {
+                                title: {
+                                display: true,
+                                text: 'Number Of Current Problems / Time'
+                            }
+                        }
+                });
+
+
+                var numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    
+                    options: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+                });
         </script>
 
 
@@ -171,7 +179,8 @@
            
 
             $("#chosenSoftware").change(function() {
-                setSoftwareData($(this).find('option:selected').text());
+                changeSoftwareData($(this).find('option:selected').text());
+                setMetricData();
             });
 
 
@@ -180,16 +189,142 @@
             });
 
 
+            //on load
+            function setSoftwareData() {
+                $.post("metricsPHP/softInfo.php", function(data){
+                    data = JSON.parse(data);
+                    for(var i=0; i<data.length; i++){
+                        $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
+                    }
+                        
+                    changeSoftwareData(data[0].Name);
+                });
+            }
 
-            function setSoftwareData(chosenSoftware) {
-                console.log(chosenSoftware);
+
+            function changeSoftwareData(chosenSoftware){
+                if(!chosenSoftware) chosenSoftware = document.getElementById("chosenSoftware").value;
+                $.post("metricsPHP/changeSoftData.php",{chosenSoftware:chosenSoftware},function(data){
+                    data = JSON.parse(data);
+                    
+                    $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
+                    $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
+                    $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
+                });
+                
+                $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(data){
+                    $("#numOfCurrentProbs").html("Number Of Problems: <strong>"+data+"</strong>")
+                });
+                setMetricData();
             }
 
 
             function setMetricData(selectedMetric){
-                console.log(selectedMetric);
+                if(!selectedMetric) selectedMetric = document.getElementById("softwareMetric").value;
+                var chosenSoftware = document.getElementById("chosenSoftware").value;
+                
+                if (selectedMetric == "Comparison of Number of Problems") {
+                    if(probTimeChart) {
+                        probTimeChart.destroy();
+                        var softProbs;
+                        var max=0;
+                        var min=Math.pow(10,1000);
+                        var softList = document.getElementById('chosenSoftware');
+
+                        for(var k=0; k<softList.length;k++){
+                            var soft = softList[k].value;
+                            $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:soft}, function(data){
+                                if(data<min & data){
+                                    min=data;
+                                }
+
+                                if(data>max&data){
+                                    max=data;
+                                }
+                               
+
+                                $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(probSoft){
+                                    console.log(min,probSoft,max);
+                                    updateGraph(min,probSoft,max);
+                                })
+                            })
+                        }
+
+                    }
+                } else {
+
+                    if(numOfProbChart){
+                        numOfProbChart.destroy();
+                        //draw probTimeChart
+
+                         $.ajax({
+                            type: "POST",
+                            url: "metricsPHP/metricsEZSQL.php",
+                            data: {type: "softProbTime"},
+                            success: function(data){
+
+                                //draw numOfProbChart
+                                probTimeChart = new Chart(document.getElementById("canvas"), {
+                                    type: 'line',
+                                    data: {
+                                        labels: [1,2,3,4,5],
+                                        datasets: [{ 
+                                            data: [12,8,1,6,1],
+                                            label: "Angel Wallace",
+                                            borderColor: "#3e95cd",
+                                            fill: false
+   
+                                        }
+                                        ]           
+                                    },
+                                    options: {
+                                        title: {
+                                        display: true,
+                                        text: 'Number Of Current Problems / Time'
+                                            }
+                                        }
+                                });    //end of draw numOfProbChart      
+                            }
+                        });    
+
+                                   
+
+                    }
+                }
             }
 
+
+            function updateGraph(min, soft, max){
+                numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Highest","Chosen Software","Lowest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [min,soft,max]
+                        }
+                        ]
+                    },
+                    options: {
+                        scales:{
+                            yAxes:[{
+                                ticks:{
+                                    suggestedMin: 0
+                                 }
+                             }]
+                        },
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                }); //end of draw chart
+            }
+        
 
         </script>
     </body>

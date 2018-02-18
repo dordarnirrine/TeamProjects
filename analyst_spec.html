@@ -69,10 +69,7 @@
     </head>
     
 
-
-
-
-    <body>
+    <body onload="setSpecOptions()">
         <div id="sidebar">
             <div id="sidebar-logo">
                 <img src="img/logo.png">
@@ -85,13 +82,14 @@
                 <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
                 <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
                 <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
-                <a href="index.html"><button type="button" class="sidebar-button"> Log Out</button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
             </div>
 
             <div id="sidebar-footer">
                 <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
             </div>
         </div>
+
         <div id="content">
             <div id="content-main">
                 
@@ -105,27 +103,17 @@
                    <h4><u>Specialist</u></h4>
 
                     <select id="specList">
-                        <option value="Angel Wallace" id="1">Angel Wallace </option>
-                        <option value="Irvin  Cruz" id="2">Irvin  Cruz</option>
-                        <option value="Grant  Santos" id="3">Grant  Santos</option>
-                        <option value="Faye   Sandoval" id="4">Faye Sandoval</option>
-                        <option value="Ora Rodgers" id="5">Ora Rodgers</option>
-                        <option value="Charlie Reeves" id="6">Charlie Reeves</option>
-                        <option value="Jenna Miles" id="7">Jenna Miles</option>
+                        
                     </select>
 
                     <ul id="SpecInfo">
-                        <li id="specName">Name: <strong>Angel Wallace</strong></li>
-                        <li id="specAge">Age: <strong>32</strong></li>
-                        <li id="specID">Staff ID: <strong>H2H5821</strong></li>
-                        <li id="specTime">Average Time To Find Solution: <strong>11 days, 12 Hours</strong></li>
-                        <li id="specNoProbs">Number of Current Problems: <strong>4</strong></li>
-                        <li id="specSols">Number of Solved Problems: <strong>42</strong></li>
-                        <li>Areas of Expertise:
-                            <ul>
-                                <li id="spec1"><strong>Printing</strong></li>
-                                <li id="spec2"><strong>Networking</strong></li>
-                                </ul>
+                        <li id="specName"></li>
+                        <li id="specAge"></li>
+                        <li id="specID"></li>
+                        <li id="specTime"></li>
+                        <li id="specNoProbs"></li>
+                        <li id="specExpertise">Areas of Expertise:
+                            
                         </li>
                     </ul>
                     
@@ -135,11 +123,11 @@
                 <div id="SpecialistPanel">
                     <h4><u>Specialist Analytics</u></h4>
                     <select id="analyticsChoice">
-                        <option value="probs/time">Number Of Problems / Time</option>
-                        <option value="Time to find Solutions">Time To Find Solutions</option>
-                        <option value="Num Of Problems vs Collegues">Comparison of Number of Problems</option> 
+                        <option value="Number Of Problems / Time">Number Of Problems / Time</option>
+                        <option value="Time To Find Solutions">Time To Find Solutions</option>
                     </select>
-                    <canvas id="line-chart" ></canvas>
+
+                    <canvas id="canvas" ></canvas>
                 </div>
 
 
@@ -153,7 +141,29 @@
 
 
         <script>
-            new Chart(document.getElementById("line-chart"), {
+
+            var timeToSolChart = new Chart(document.getElementById("canvas"), {
+                type: 'bar',
+                data: {
+                    labels: ["Lowest", "Angel Wallace", "Highest"],
+                    datasets: [
+                    {
+                        label: "Time To Find Solution",
+                        backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
+                        data: [1,3,12]
+                    }
+                    ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Time To Find Solution'
+                    }       
+                }
+            });    //end of draw chart
+
+            var probTimeChart = new Chart(document.getElementById("canvas"), {
                 type: 'line',
                 data: {
                     labels: [1,2,3,4,5,6,7,8,9,10],
@@ -172,42 +182,185 @@
                             text: 'Number Of Current Problems / Time'
                         }
                     }
-                });
+            });
 
         </script>
 
-
-
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         
+
         <script type="text/javascript">
-            
-            //different specialist chosen
-            $("#specList").change(function() {
-                var selectedSpec = $(this).find('option:selected').text();
-                setSpecData($(this).find('option:selected').text());
-            });
-
-
-            //different graph chosen
+           
 
             $("#analyticsChoice").change(function() {
                var chosenMetric = $(this).find('option:selected').text();
                setChartShown($(this).find('option:selected').text());
-            });            
+            });   
+
+
+            $("#specList").change(function(){
+                var chosenSpec = $(this).find('option:selected').text();
+                setInfoToChosen(chosenSpec);
+            });
 
 
 
-            function setSpecData(selectedSpec) {
-                console.log(selectedSpec);
-                $('#specName').html("Name: <strong>" + selectedSpec + "</strong>");
-                //get data from database query
-                //change corresponding data fro database
+            function setSpecOptions() {
+                $.post("metricsPHP/specInfo.php",function(data){
+                    data=JSON.parse(data);
+                    
+                    for(var i=0;i<data.length;i++){
+                        $("#specList").append("<option>"+data[i].Name+"</option>");
+                    }
+                    setInfoToChosen();
+                    setChartShown();
+                });
             }
 
 
+
+            function setInfoToChosen(chosenSpecialist){
+               
+                if(!chosenSpecialist) chosenSpecialist=document.getElementById("specList").value;
+                
+                $.post("metricsPHP/changeSpecData.php",{chosenSpecialist:chosenSpecialist}, function(data){
+                    data=JSON.parse(data);
+                    $("#specName").html("Name: <strong>"+data[0].Name+"</strong>");
+                    $("#specAge").html("Age: <strong>"+data[0].Age+"</strong>");
+                    $("#specID").html("ID Number: <strong>"+data[0].SpecilailistID+"</strong>");
+                    $("#specExpertise").html("Areas of Expertise:");
+                    for(var x=0; x<data.length;x++){
+                        $("#specExpertise").append("<li><strong>"+data[x].ProbType+"</strong></li>");
+                    }
+
+                });
+
+                $.post("metricsPHP/specNoOfProbs.php",{chosenSpecialist:chosenSpecialist}, function(data){
+                    data = JSON.parse(data);
+                    $("#specNoProbs").html("Number Of Problems: <strong>"+data[0].total+"</strong>");
+                });
+
+                
+                $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:chosenSpecialist},function(data){
+                    data = JSON.parse(data);
+                    $("#specTime").html("Average Time To Sol: <strong>"+data[0].AVERAGE+" months </strong>");
+                    setChartShown();
+                });
+
+                
+            }
+
+
+
             function setChartShown(chosenMetric) {
-                console.log(chosenMetric);
+                if(!chosenMetric) chosenMetric = document.getElementById("analyticsChoice").value;
+                var spec1 = document.getElementById("specList").value;
+
+                if (chosenMetric == "Number Of Problems / Time") {
+                    
+                    if(timeToSolChart) {
+                        timeToSolChart.destroy();
+
+                         //Get data from php
+                        $.ajax({
+                            type: "POST",
+                            url: "metricsPHP/metricsEZSQL.php",
+                            data: {type: "specNumProb"},
+                            success: function(data){
+                          
+                                //draw the chart
+                                probTimeChart = new Chart(document.getElementById("canvas"), {
+                                    type: 'line',
+                                    data: {
+                                        labels: [1,2,3,4,5,6,7,8,9,10],
+                                        datasets: [{ 
+                                            data: [12,10,8,6,6,1,5,9,8,7],  
+                                            label: "Angel Wallace",
+                                            borderColor: "#3e95cd",
+                                            fill: false
+   
+                                        }
+                                        ]           
+                                    },
+                                    options: {
+                                        title: {
+                                        display: true,
+                                        text: 'Number Of Current Problems / Time'
+                                        }
+                                    }
+                                }); //end of drawing the chart          
+                            }
+                        });
+
+                    }
+
+                } else {
+                    
+                    if(probTimeChart) {
+                       probTimeChart.destroy();
+                        //draw the time to sol chart
+                        var avg;
+                        var max=0;
+                        var min=Math.pow(10, 1000);
+                        var specialistList = document.getElementById('specList');
+                        
+                        for(var k=0;k<specialistList.length;k++) {
+                            $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:specialistList[k].value},function(data){
+                                
+                                data = JSON.parse(data);
+
+                                if(data[0].AVERAGE < min & data[0].AVERAGE){
+                                    min = data[0].AVERAGE;
+                                }
+
+                                if(data[0].AVERAGE > max){
+                                    max = data[0].AVERAGE;
+                                }
+                                
+                                $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:document.getElementById('specList').value},function(averageTime){
+                                    data = JSON.parse(averageTime)
+                                    avg = data[0].AVERAGE;
+                                    updateGraph(min,max,avg);
+                                });
+
+                                
+                            });
+                        }
+                    }
+                } 
+
+
+                function updateGraph(min, max, avg){
+                    console.log(avg);
+                    timeToSolChart = new Chart(document.getElementById("canvas"), {
+                        type: 'bar',
+                        data: {
+                            labels: ["Lowest", document.getElementById("specList").value, "Highest"],
+                            datasets: [
+                            {
+                                label: "Time To Find Solution",
+                                backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
+                                data: [min,avg,max]
+                            }
+                            ]
+                        },
+                        options: {
+                            scales:{
+                                yAxes:[{
+                                    ticks:{
+                                        suggestedMin: 0
+                                    }
+                                }]
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Time To Find Solution'
+                            }       
+                        }
+                    });    //end of draw chart
+                }
+
             }
 
 
