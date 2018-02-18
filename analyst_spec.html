@@ -144,17 +144,9 @@
 
             var timeToSolChart = new Chart(document.getElementById("canvas"), {
                 type: 'bar',
-                data: {
-                    labels: ["Lowest", "Angel Wallace", "Highest"],
-                    datasets: [
-                    {
-                        label: "Time To Find Solution",
-                        backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd"],
-                        data: [1,3,12]
-                    }
-                    ]
-                },
                 options: {
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
                     legend: { display: false },
                     title: {
                         display: true,
@@ -165,23 +157,14 @@
 
             var probTimeChart = new Chart(document.getElementById("canvas"), {
                 type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7,8,9,10],
-                    datasets: [{ 
-                        data: [12,10,8,6,6,1,5,9,8,7],
-                        label: "Angel Wallace",
-                        borderColor: "#3e95cd",
-                        fill: false
-   
+                options: {
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
+                    title: {
+                        display: true,
+                        text: 'Number Of Current Problems / Time'
                     }
-                    ]           
-                },
-                        options: {
-                            title: {
-                            display: true,
-                            text: 'Number Of Current Problems / Time'
-                        }
-                    }
+                }
             });
 
         </script>
@@ -236,14 +219,16 @@
                 });
 
                 $.post("metricsPHP/specNoOfProbs.php",{chosenSpecialist:chosenSpecialist}, function(data){
-                    data = JSON.parse(data);
-                    $("#specNoProbs").html("Number Of Problems: <strong>"+data[0].total+"</strong>");
+                    console.log(data);
+                    $("#specNoProbs").html("Number Of Problems: <strong>"+data+"</strong>");
+
                 });
 
                 
                 $.post("metricsPHP/specAvgTimeToSol.php",{chosenSpecialist:chosenSpecialist},function(data){
                     data = JSON.parse(data);
-                    $("#specTime").html("Average Time To Sol: <strong>"+data[0].AVERAGE+" months </strong>");
+                    console.log(data);
+                    $("#specTime").html("Average Time To Sol: <strong>"+Math.round(data[0].AVERAGE)+" days </strong>");
                     setChartShown();
                 });
 
@@ -311,7 +296,7 @@
             }
 
             function updateGraph(min, max, avg){
-                console.log(avg);
+                
 
                 timeToSolChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
@@ -326,6 +311,8 @@
                         ]
                     },
                     options: {
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
                         scales:{
                             yAxes:[{
                                 ticks:{
@@ -360,6 +347,8 @@
                             ]
                         },
                         options: {
+                            tooltips: {enabled: false},
+                            hover: {mode: null},
                             title: {
                                 display: true,
                                 text: 'Backlog Chart',
@@ -371,41 +360,42 @@
 
 
 
-            function sortByDate(dataArray){
+           function sortByDate(dataArray){
                     var tempArray=[];
                     for(var i=0; i<dataArray.length;i++){
                         tempArray.push(dataArray[i].split("."));
-
                     }
-                    for(var x=0; x<tempArray.length-1;x++){
-                        for(var i=0;i<tempArray.length-1;i++){
-                            var year1=tempArray[i][1].split("-")[0];
-                            var year2=tempArray[i+1][1].split("-")[0];
-                            var month1=tempArray[i][1].split("-")[1];
-                            var month2=tempArray[i+1][1].split("-")[1];
+                    for(var x=0; x<dataArray.length-1;x++) {
+                        for(var i=0;i<tempArray.length-1;i++) {
+                            
                             var day1=tempArray[i][1].split("-")[2];
-                            var day2=tempArray[i][1].split("-")[2];
+                            var month1=tempArray[i][1].split("-")[1];
+                            var year1=tempArray[i][1].split("-")[0];
+                            
+                            var day2=tempArray[i+1][1].split("-")[2];
+                            var month2=tempArray[i+1][1].split("-")[1];
+                            var year2=tempArray[i+1][1].split("-")[0];        
 
-                            if(parseInt(year2)<parseInt(year1)){
+                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
                                 var temp = tempArray[i];
                                 tempArray[i] = tempArray[i+1];
                                 tempArray[i+1] = temp;
                     
-                            } else if(parseInt(month2)<parseInt(month1)){
+                            } else if(parseInt(month2)<parseInt(month1) && parseInt(year2)==parseInt(year1)){  
+
                                 var temp = tempArray[i];
                                 tempArray[i] = tempArray[i+1];
                                 tempArray[i+1] = temp;
 
-                            } else if(parseInt(day2)<parseInt(day1)){
-                                var temp = tempArray[i+1];
-                                tempArray[i+1] = tempArray[i];
-                                tempArray[i] = temp;
+                            } else if(parseInt(day2)<parseInt(day1) &&parseInt(year2)==parseInt(year1)&&parseInt(month2)==parseInt(month1) ){
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
 
                             }
-
                         }
+                        
                     }
-                    console.log(tempArray);
                     for(var i=0; i<dataArray.length;i++){
                         tempArray[i] = tempArray[i][0];
 
@@ -414,15 +404,15 @@
             }
 
 
-        function formatDate(date) {
-            var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
-            return [year, month, day].join('-');
-        }
+            function formatDate(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
         
 
         

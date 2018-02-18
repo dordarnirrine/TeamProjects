@@ -118,7 +118,7 @@
 
                <div id ="Backlog">
                     <h4><u>Backlog: </u> The number of on-going problems</h4>
-                    <p id="totalBacklog">Total Backlog: <strong>532</strong></p>
+                    <p id="totalBacklog">Total Backlog: <strong></strong></p>
                     
                     <canvas id="canvas" height=90></canvas>
                
@@ -136,8 +136,9 @@
          
         var timeChart = new Chart(document.getElementById("canvas"), {
             type: 'pie',
-                
-                options: {
+            options: {
+                tooltips: {enabled: false},
+                hover: {mode: null},
                 title: {
                     display: true,
                     text: 'Problem Type and Problem Chart',
@@ -150,12 +151,14 @@
         var backlogChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
                 options: {
-                title: {
-                    display: true,
-                    text: 'Backlog Chart',
-                    responsive: true,
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
+                    title: {
+                        display: true,
+                        text: 'Backlog Chart',
+                        responsive: true,
+                    }
                 }
-            }
         });
         
         </script>
@@ -169,11 +172,20 @@
 
             $("#chartSelect").change(function() {
                setChartShown($(this).find('option:selected').text());
+
             });
 
 
 
             function setChartShown(chosenMetric) {
+
+                $.post("metricsPHP/backlog.php", function(data){
+                    console.log(data);
+                    $("#totalBacklog").html("Total Backlog: <strong>"+data+"</strong></p>");
+
+                });
+
+                //comapre
                 if(!chosenMetric) chosenMetric = document.getElementById("chartSelect").value;
      
                 if(chosenMetric == "View \"Backlog\" Data"){
@@ -221,6 +233,8 @@
                         ]
                     },
                     options: {
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
                         title: {
                             display: true,
                             text: 'Backlog Chart',
@@ -254,6 +268,8 @@
                             }]
                         },
                         options: {
+                            tooltips: {enabled: false},
+                            hover: {mode: null},
                             title: {
                                 display: true,
                                 text: 'Problem Type and Problem Chart',
@@ -280,45 +296,46 @@
 
 
             function sortByDate(dataArray){
-                var tempArray=[];
-                for(var i=0; i<dataArray.length;i++){
-                    tempArray.push(dataArray[i].split("."));
+                    var tempArray=[];
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray.push(dataArray[i].split("."));
+                    }
+                    for(var x=0; x<dataArray.length-1;x++) {
+                        for(var i=0;i<tempArray.length-1;i++) {
+                            
+                            var day1=tempArray[i][1].split("-")[2];
+                            var month1=tempArray[i][1].split("-")[1];
+                            var year1=tempArray[i][1].split("-")[0];
+                            
+                            var day2=tempArray[i+1][1].split("-")[2];
+                            var month2=tempArray[i+1][1].split("-")[1];
+                            var year2=tempArray[i+1][1].split("-")[0];        
 
-                }
-                for(var x=0; x<tempArray.length-1;x++){
-                    for(var i=0;i<tempArray.length-1;i++){
-                        var year1=tempArray[i][1].split("-")[0];
-                        var year2=tempArray[i+1][1].split("-")[0];
-                        var month1=tempArray[i][1].split("-")[1];
-                        var month2=tempArray[i+1][1].split("-")[1];
-                        var day1=tempArray[i][1].split("-")[2];
-                        var day2=tempArray[i][1].split("-")[2];
-
-                        if(parseInt(year2)<parseInt(year1)){
-                            var temp = tempArray[i];
-                            tempArray[i] = tempArray[i+1];
-                            tempArray[i+1] = temp;
+                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
                     
-                        } else if(parseInt(month2)<parseInt(month1)){
-                            var temp = tempArray[i];
-                            tempArray[i] = tempArray[i+1];
-                            tempArray[i+1] = temp;
+                            } else if(parseInt(month2)<parseInt(month1) && parseInt(year2)==parseInt(year1)){  
 
-                        } else if(parseInt(day2)<parseInt(day1)){
-                            var temp = tempArray[i+1];
-                            tempArray[i+1] = tempArray[i];
-                            tempArray[i] = temp;
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
 
+                            } else if(parseInt(day2)<parseInt(day1) && parseInt(year2)==parseInt(year1)&&parseInt(month2)==parseInt(month1) ){
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            }
                         }
+                        
+                    }
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray[i] = tempArray[i][0];
 
                     }
-                }
-                console.log(tempArray);
-                for(var i=0; i<dataArray.length;i++){
-                    tempArray[i] = tempArray[i][0];
-
-                }
-                return tempArray;
+                    return tempArray;
             }
 
 
