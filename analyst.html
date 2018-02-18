@@ -1,4 +1,3 @@
-
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -150,16 +149,6 @@
 
         var backlogChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
-                data: {
-                    labels: [1,2,3,4,5],
-                    datasets: [{ 
-                        data: [3,4,5,1,2],
-                        label: "Backlog",
-                        borderColor: "#3e95cd",
-                        fill: false
-                },
-                ]
-                },
                 options: {
                 title: {
                     display: true,
@@ -178,7 +167,6 @@
         <script type="text/javascript">
             
 
-            //different chart chosen
             $("#chartSelect").change(function() {
                setChartShown($(this).find('option:selected').text());
             });
@@ -189,48 +177,21 @@
                 if(!chosenMetric) chosenMetric = document.getElementById("chartSelect").value;
      
                 if(chosenMetric == "View \"Backlog\" Data"){
-                    
                     if (timeChart) {
+                        var dataArray = [];
                         timeChart.destroy();
-                        
-                        //Get data from php
-                        $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/backlog.php",
-                            data: {type: "genBacklog"},
-                            success: function(data){
 
-                                console.log(data);
-                                $("#totalBacklog").html("Total Backlog: <strong>"+data+"</strong>")
-                                //convert data to a type to be used for the graphs
+                        for(var k=0; k<6;k++){
+                            var kWeeksAgo = new Date();
+                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
 
-                                //draw backlog chart with data from database
-                                backlogChart = new Chart(document.getElementById("canvas"), {
-                                type: 'line',
-                                data: {
-                                    labels: [1,2,3,4,5],
-                                    datasets: [{ 
-                                        data: [3,4,5,1,2],
-                                        label: "Backlog",
-                                        borderColor: "#3e95cd",
-                                        fill: false
-                                    },
-                                    ]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: 'Backlog Chart',
-                                        responsive: true,
-                                    }
-                                }       
-                                }); //end of draw backlog chart
-                            }   //end of success function 
-
-                        }); //end of $.ajax
+                            $.post("metricsPHP/numOfProbsOverTime.php",{date:formatDate(kWeeksAgo)}, function(data){
+                                dataArray.push(data);
+                                updateLineChart(dataArray);
+                            });
+                        }
 
                     }
-
 
                 } else {
                     if (backlogChart) {
@@ -238,6 +199,36 @@
                         updatePieChart();
                     }
                 }
+            }
+
+
+
+            function updateLineChart(dataArray){
+                //sort by date
+               
+                dataArray = sortByDate(dataArray);
+                
+                backlogChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5,6],
+                        datasets: [{ 
+                            data:dataArray,
+                            label: "Backlog",
+                            borderColor: "#3e95cd",
+                            fill: false
+                        },
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Backlog Chart',
+                            responsive: true,
+                        }
+                    }       
+                }); //end of draw backlog chart
+                
             }
 
 
@@ -252,10 +243,7 @@
                         labelArray.push(probTypeData[i].ProbType);
                         dataArray.push(probTypeData[i].ProbNumCount);
                     }
-                    
-                    console.log(labelArray);
-                    console.log(dataArray);
-
+                        
                     timeChart = new Chart(document.getElementById("canvas"), {
                         type: 'pie',
                         data :{
@@ -276,6 +264,63 @@
 
                 });
             }
+
+
+
+            function formatDate(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+
+
+            function sortByDate(dataArray){
+                var tempArray=[];
+                for(var i=0; i<dataArray.length;i++){
+                    tempArray.push(dataArray[i].split("."));
+
+                }
+                for(var x=0; x<tempArray.length-1;x++){
+                    for(var i=0;i<tempArray.length-1;i++){
+                        var year1=tempArray[i][1].split("-")[0];
+                        var year2=tempArray[i+1][1].split("-")[0];
+                        var month1=tempArray[i][1].split("-")[1];
+                        var month2=tempArray[i+1][1].split("-")[1];
+                        var day1=tempArray[i][1].split("-")[2];
+                        var day2=tempArray[i][1].split("-")[2];
+
+                        if(parseInt(year2)<parseInt(year1)){
+                            var temp = tempArray[i];
+                            tempArray[i] = tempArray[i+1];
+                            tempArray[i+1] = temp;
+                    
+                        } else if(parseInt(month2)<parseInt(month1)){
+                            var temp = tempArray[i];
+                            tempArray[i] = tempArray[i+1];
+                            tempArray[i+1] = temp;
+
+                        } else if(parseInt(day2)<parseInt(day1)){
+                            var temp = tempArray[i+1];
+                            tempArray[i+1] = tempArray[i];
+                            tempArray[i] = temp;
+
+                        }
+
+                    }
+                }
+                console.log(tempArray);
+                for(var i=0; i<dataArray.length;i++){
+                    tempArray[i] = tempArray[i][0];
+
+                }
+                return tempArray;
+            }
+
 
             </script>
     </body>
