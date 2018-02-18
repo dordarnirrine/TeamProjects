@@ -86,10 +86,9 @@
                     </thead>
                     <tbody>
                         <?php
-                            // Reminder to Add their specialisations from the db, SPECID -> SoftwareType
-                            // Replace this with call to php page specInfo.php
-                            $res = '[{"SpecilailistID":"1","NumOfProblems":"2","Name":"Jeff Bezos","Age":"42","Types":["Printing"]},{"SpecilailistID":"2","NumOfProblems":"1","Name":"Bill Gates","Age":"62","Types":["Networking"]},{"SpecilailistID":"3","NumOfProblems":"3","Name":"Sergey Bin","Age":"34","Types":["Software"]},{"SpecilailistID":"4","NumOfProblems":"4","Name":"Steve Jobs","Age":"27","Types":["Hardware","Software"]},{"SpecilailistID":"5","NumOfProblems":"2","Name":"Elon Musk","Age":"41","Types":["Hardware","Networking"]}]';                  
-                            //
+
+                            include "metricsPHP/specInfo.php";
+                            $res = ob_get_clean(); 
                             $res = (json_decode($res, true));
 
                             foreach($res as $spec){
