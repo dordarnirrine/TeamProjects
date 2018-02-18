@@ -1,0 +1,344 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <!-- <script src="js/INSERT_FILE_NAME.js"> </script> -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        
+        <style>
+            img {
+                width: 50%;
+                height: auto;
+            }
+            table {
+               font-family: arial, sans-serif;
+               border-collapse: collapse;
+               width: 100%;
+            }
+
+            p{
+                margin-left: 5px;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+               padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            select {
+                margin:10px;
+            }
+
+            option{
+                margin:5px;
+            }
+
+            #ChooseSpecPanel{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:350px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+
+            #SpecialistPanel{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:450px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            #Backlog{
+                height:400px;
+                width:850px;
+                margin:10px;
+                margin-left:15px;
+                padding:3px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+        </style>
+    
+    </head>
+        
+    <body onload="setChartShown()">
+        
+        <div id="sidebar">
+            <div id="sidebar-logo">
+                <img src="img/logo.png">
+            </div>
+            
+            <div id="sidebar-buttons">
+                <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
+                <hr>
+                <a href="analyst.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> General </button></a>
+                <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
+                <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
+            </div>
+
+            <div id="sidebar-footer">
+                <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
+            </div>
+        </div>
+
+        <div id="content">
+            <div id="content-main">
+                
+                <div id="content-title">
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">General Analytics</h1>
+                    <hr style="color: #EEEEEE; border-width: 2px">
+                </div>
+
+                <p> Choose What Data you Wish to View: 
+                <select id="chartSelect">
+                    <option>View "Backlog" Data</option>
+                    <option>View "Problems for Problem Types" Data</option>
+                    
+                </select>
+
+
+               <div id ="Backlog">
+                    <h4><u>Backlog: </u> The number of on-going problems</h4>
+                    <p id="totalBacklog">Total Backlog: <strong></strong></p>
+                    
+                    <canvas id="canvas" height=90></canvas>
+               
+               </div>
+
+
+            </div>
+        </div>
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+        <script src="Chart.min.js"></script>
+
+        <script>
+         
+        var timeChart = new Chart(document.getElementById("canvas"), {
+            type: 'pie',
+            options: {
+                tooltips: {enabled: false},
+                hover: {mode: null},
+                title: {
+                    display: true,
+                    text: 'Problem Type and Problem Chart',
+                    responsive: true,
+                }
+            }
+        }); 
+
+
+        var backlogChart = new Chart(document.getElementById("canvas"), {
+            type: 'line',
+                options: {
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
+                    title: {
+                        display: true,
+                        text: 'Backlog Chart',
+                        responsive: true,
+                    }
+                }
+        });
+        
+        </script>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script type="text/javascript">
+            
+
+            $("#chartSelect").change(function() {
+               setChartShown($(this).find('option:selected').text());
+
+            });
+
+
+
+            function setChartShown(chosenMetric) {
+
+                $.post("metricsPHP/backlog.php", function(data){
+                    console.log(data);
+                    $("#totalBacklog").html("Total Backlog: <strong>"+data+"</strong></p>");
+
+                });
+
+                //comapre
+                if(!chosenMetric) chosenMetric = document.getElementById("chartSelect").value;
+     
+                if(chosenMetric == "View \"Backlog\" Data"){
+                    if (timeChart) {
+                        var dataArray = [];
+                        timeChart.destroy();
+
+                        for(var k=0; k<6;k++){
+                            var kWeeksAgo = new Date();
+                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
+
+                            $.post("metricsPHP/numOfProbsOverTime.php",{date:formatDate(kWeeksAgo)}, function(data){
+                                dataArray.push(data);
+                                updateLineChart(dataArray);
+                            });
+                        }
+
+                    }
+
+                } else {
+                    if (backlogChart) {
+                        backlogChart.destroy();
+                        updatePieChart();
+                    }
+                }
+            }
+
+
+
+            function updateLineChart(dataArray){
+                //sort by date
+               
+                dataArray = sortByDate(dataArray);
+                
+                backlogChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5,6],
+                        datasets: [{ 
+                            data:dataArray,
+                            label: "Backlog",
+                            borderColor: "#3e95cd",
+                            fill: false
+                        },
+                        ]
+                    },
+                    options: {
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
+                        title: {
+                            display: true,
+                            text: 'Backlog Chart',
+                            responsive: true,
+                        }
+                    }       
+                }); //end of draw backlog chart
+                
+            }
+
+
+
+            function updatePieChart(){
+                var labelArray=[];
+                var dataArray=[];
+
+                $.post("metricsPHP/probTypeNum.php", function(probTypeData){
+                    probTypeData = JSON.parse(probTypeData);
+                    for(var i=0; i<probTypeData.length;i++){
+                        labelArray.push(probTypeData[i].ProbType);
+                        dataArray.push(probTypeData[i].ProbNumCount);
+                    }
+                        
+                    timeChart = new Chart(document.getElementById("canvas"), {
+                        type: 'pie',
+                        data :{
+                            labels: labelArray,
+                            datasets:[{
+                                data:dataArray,
+                                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
+                            }]
+                        },
+                        options: {
+                            tooltips: {enabled: false},
+                            hover: {mode: null},
+                            title: {
+                                display: true,
+                                text: 'Problem Type and Problem Chart',
+                                responsive: true,
+                            }
+                        }
+                    }); 
+
+                });
+            }
+
+
+
+            function formatDate(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+
+
+            function sortByDate(dataArray){
+                    var tempArray=[];
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray.push(dataArray[i].split("."));
+                    }
+                    for(var x=0; x<dataArray.length-1;x++) {
+                        for(var i=0;i<tempArray.length-1;i++) {
+                            
+                            var day1=tempArray[i][1].split("-")[2];
+                            var month1=tempArray[i][1].split("-")[1];
+                            var year1=tempArray[i][1].split("-")[0];
+                            
+                            var day2=tempArray[i+1][1].split("-")[2];
+                            var month2=tempArray[i+1][1].split("-")[1];
+                            var year2=tempArray[i+1][1].split("-")[0];        
+
+                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+                    
+                            } else if(parseInt(month2)<parseInt(month1) && parseInt(year2)==parseInt(year1)){  
+
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            } else if(parseInt(day2)<parseInt(day1) && parseInt(year2)==parseInt(year1)&&parseInt(month2)==parseInt(month1) ){
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            }
+                        }
+                        
+                    }
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray[i] = tempArray[i][0];
+
+                    }
+                    return tempArray;
+            }
+
+
+            </script>
+    </body>
+</html> 

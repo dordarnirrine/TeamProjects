@@ -1,0 +1,405 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/INSERT_FILE_NAME.js"> </script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            img {
+                width: 50%;
+                height: auto;
+            }
+            table {
+               font-family: arial, sans-serif;
+               border-collapse: collapse;
+               width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+               padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            select {
+                margin:10px;
+                
+            }
+
+            option{
+                margin:5px;
+            }
+
+            #ChooseEquip{
+               margin:10px;
+               margin-left:15px;
+                padding:3px;
+                height:450px;
+                width:350px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            #EquipmentAnalytics{
+                margin:10px;
+                padding:3px;
+                height:450px;
+                width:500px;
+                border:solid;
+                border-width: 1px;
+                border-radius:3px;
+                display: inline-block;
+                float:left;
+            }
+
+            li{
+                margin:10px;
+                margin-left:30px;
+            }
+        </style>
+    
+        <script type="text/javascript">
+
+            function equipmentChosen(){
+
+            }
+            
+        </script>
+
+    </head>
+
+
+
+    <body onload="setEquipToChoose()">
+        <div id="sidebar">
+            <div id="sidebar-logo">
+                <img src="img/logo.png">
+            </div>
+            
+            <div id="sidebar-buttons">
+                <p style="font-size: 24pt; text-indent: 10px; color: #EEEEEE; margin-bottom: 2px"> Navigation </p>
+                <hr>
+                <a href="analyst.html"><button type="button" class="sidebar-button" style="margin-top: 4px"> General </button></a>
+                <a href="analyst_spec.html"><button type="button" class="sidebar-button"> Specialists </button></a>
+                <a href="analyst_equip.html"><button type="button" class="sidebar-button"> Equipment </button></a>
+                <a href="analyst_software.html"><button type="button" class="sidebar-button"> Software </button></a>
+                <a href="index.php"><button type="button" class="sidebar-button"> Log Out</button></a>
+            </div>
+
+            <div id="sidebar-footer">
+                <span style="padding-top: 3px;"> Footer / Copyright / Footer</span>
+            </div>
+        </div>
+        
+
+        <div id="content">
+            <div id="content-main">
+                
+                <div id="content-title">
+                    <h1 style="color: #121212; text-indent: 25px; margin-bottom: 2px">Equipment Analytics</h1>
+                    <hr style="color: #EEEEEE; border-width: 2px">
+                </div>
+
+                <div id="ChooseEquip">
+                    <h4><u>Equipment</u></h4>
+                    
+                    <ul id="EquipInfo">
+                        <select id="chosenEquip"></select >
+
+                        <li id ="Make"></li>
+                        <li id="Model"></strong></li>
+                        <li id="EquipType"></li>
+                        <li id="NoOfProblems"></li>
+                        
+                    </ul>
+                </div>
+
+
+                <div id="EquipmentAnalytics">
+                    <h4><u>Specialist Analytics</u></h4>
+                    <select id="equipmentMetric">
+                        <option value="Comparison of Number of Problems">Comparison of Number of Problems</option> 
+                        <option value="Number Of Problems / Time">Number Of Problems / Time</option>
+                    </select>
+
+                    <canvas id="canvas" ></canvas>
+                </div>
+
+
+                <script src="Chart.min.js"></script>
+                <script>
+                
+                var probTimeChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    options: {
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
+                        title: {
+                        display: true,
+                        text: 'Number Of Current Problems / Time'
+                        }
+                    }
+                });
+
+                var numOfProbChart = new Chart(document.getElementById("canvas"), {
+                            type: 'bar',
+                            options: {
+                                tooltips: {enabled: false},
+                                hover: {mode: null},
+                                legend: { display: false },
+                                title: {
+                                    display: true,
+                                    text: 'Total Number of Problems'
+                                }
+                            }
+                });       
+                
+
+                </script>
+
+            </div>
+        </div>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script type="text/javascript">
+           
+
+            $("#chosenEquip").change(function() {
+                setEquipData($(this).find('option:selected').text());
+            });
+
+
+
+            $("#equipmentMetric").change(function() {
+                setMetricData($(this).find('option:selected').text());
+            });
+
+
+
+            function setEquipToChoose(){
+               $.post("metricsPHP/equipInfo.php",function(data){
+                    data = JSON.parse(data); 
+                    for(var i=0; i<data.length;i++){
+                        $("#chosenEquip").append("<option>"+data[i].Make+"-"+data[i].Model+"</option>");
+                    }
+                    setEquipData();
+                    
+                });
+            }
+
+
+
+            function setEquipData(chosenEquip) {
+                if(!chosenEquip) chosenEquip = document.getElementById("chosenEquip").value;
+                
+                var make = chosenEquip.split("-")[0];
+                var model = chosenEquip.split("-")[1];
+
+                $.post("metricsPHP/chosenEquipInfo.php",{make:make, model:model},function(data){
+                    data = JSON.parse(data);
+                    $("#Make").html("Make: <strong>"+data[0].Make+"</strong>");
+                    $("#Model").html("Model: <strong>"+data[0].Model+"</strong>");
+                    $("#EquipType").html("Equipment Type: <strong>"+data[0].Type+"</strong>");
+                });
+
+                $.post("metricsPHP/equipNoOfProbs.php",{make:make, model:model},function(data){
+                    $("#NoOfProblems").html("Number Of Problems: <strong>"+data+"</strong>");
+                });
+                setMetricData();
+                
+            }
+
+
+
+            function setMetricData(selectedMetric){
+                if(!selectedMetric) selectedMetric = document.getElementById("equipmentMetric").value;
+               
+                
+
+                if (selectedMetric == "Comparison of Number of Problems") {
+                    if(probTimeChart) {
+                        probTimeChart.destroy();
+                        var equipProbs;
+                        var max=0;
+                        var min=Math.pow(10,1000);
+                        var equipList = document.getElementById('chosenEquip');
+
+                        for(var k=0; k<equipList.length;k++){
+                            var equip = equipList[k].value;
+                            var make = equip.split("-")[0];
+                            var model = equip.split("-")[1];
+                            $.post("metricsPHP/equipNoOfProbs.php",{make:make,model:model}, function(data){
+                                console.log(data);
+                                if(data<min){
+                                    min = data;
+                                }
+                                if(data>max & data){
+                                    max = data;
+                                }
+
+                                var chosenEquip = document.getElementById("chosenEquip").value;
+                                $.post("metricsPHP/equipNoOfProbs.php",{make:chosenEquip.split("-")[0], model:chosenEquip.split("-")[1]},function(equipChosenProbs){
+                                    updateGraph(min,equipChosenProbs,max);
+                                });
+                            });
+                        }
+
+                       
+
+                    }
+
+                } else {
+                    if(numOfProbChart){
+                        numOfProbChart.destroy();
+                        //draw probTimeChart
+
+                        var dataArray = [];
+                        var make = chosenEquip.value.split("-")[0];
+                        var model = chosenEquip.value.split("-")[1];
+                        
+                        for(var k=0; k<6;k++){
+                            var kWeeksAgo = new Date();
+                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
+                            
+                            $.post("metricsPHP/EquipProbsOverTime.php",{date:formatDate(kWeeksAgo),make:make,model:model}, function(data){
+                                
+                                dataArray.push(data);
+                                updateLineChart(dataArray);
+                            });
+                        }  
+                    }
+                }
+            }
+
+
+            function updateGraph(min, prob, max){
+                
+                numOfProbChart = new Chart(document.getElementById("canvas"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Lowest","Chosen Equipment","Highest"],
+                        datasets: [
+                        {
+                            label: "Total Number of Problems",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3e95cd","#3e95cd","#3e95cd"],
+                            data: [min,prob,max]
+                        }
+                        ]
+                    },
+                    options: {
+                        scales:{
+                            yAxes:[{
+                                ticks:{
+                                    suggestedMin: 0
+                                 }
+                             }]
+                        },
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Problems'
+                        }
+                    }
+
+                }); //end of draw chart
+            }
+               
+
+
+            function updateLineChart(dataArray){
+                //sort by date
+               
+                dataArray = sortByDate(dataArray);
+                
+                backlogChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5,6],
+                        datasets: [{ 
+                            data:dataArray,
+                            label: "Backlog",
+                            borderColor: "#3e95cd",
+                            fill: false
+                        },
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Backlog for Chosen Equipment Chart',
+                            responsive: true,
+                        }
+                    }       
+                }); //end of draw backlog chart
+                
+            }
+
+
+
+            function formatDate(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+
+
+            function sortByDate(dataArray){
+                    var tempArray=[];
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray.push(dataArray[i].split("."));
+                    }
+                    for(var x=0; x<dataArray.length-1;x++) {
+                        for(var i=0;i<tempArray.length-1;i++) {
+                            
+                            var day1=tempArray[i][1].split("-")[2];
+                            var month1=tempArray[i][1].split("-")[1];
+                            var year1=tempArray[i][1].split("-")[0];
+                            
+                            var day2=tempArray[i+1][1].split("-")[2];
+                            var month2=tempArray[i+1][1].split("-")[1];
+                            var year2=tempArray[i+1][1].split("-")[0];        
+
+                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+                    
+                            } else if(parseInt(month2)<parseInt(month1) && parseInt(year2)==parseInt(year1)){  
+
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            } else if(parseInt(day2)<parseInt(day1) &&parseInt(year2)==parseInt(year1)&&parseInt(month2)==parseInt(month1) ){
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            }
+                        }
+                        
+                    }
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray[i] = tempArray[i][0];
+
+                    }
+                    return tempArray;
+            }
+        </script>
+    </body>
+</html> 
