@@ -1,3 +1,10 @@
+<!-- Written by Sam Thompson B619450-->
+<!-- Used to display the specialist data to the analyst-->
+<!-- The analyst can choose a specialist, and data and charts are shown about that specialist-->
+<!-- Data is displayed in both bullet point form -->
+<!-- And in the form of two graphs 1.Comparison of number of average time to solve a  problems 2.Number of prblems/time-->
+
+
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -103,7 +110,6 @@
           
           <div class="col-md-12 ml-sm-12">
 
-        <div class="row">
           <div id="ChooseSpecPanel" height="50px">
                    <h4><u>Specialists</u></h4>
 
@@ -132,15 +138,15 @@
                         <option value="Time To Find Solutions">Time To Find Solutions</option>
                     </select>
 
-                    <canvas id="canvas" style="width: 400px; height: 300px"></canvas>
+                    <canvas id="canvas" style="width: 80%; height: 80%"></canvas>
                 </div>
 
-          </div>
+          
       </div>
 
           
         <script>
-            //intialises the timetosol chart, using charttjs
+            //intialises the timetosol chart, using ChartJs
             var timeToSolChart = new Chart(document.getElementById("canvas"), {
                 type: 'bar',
                 options: {

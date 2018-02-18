@@ -1,6 +1,8 @@
 <!-- Written by Sam Thompson B619450-->
 <!-- This code is used to display the webpage for the general analytics-->
-<!-- There are 2 graphs to  be chosen from -->
+<!-- There are 2 graphs to  be chosen from 1.Backlog/Time Chart and 2.Number Of problems per problemtype chartjs -->
+<!-- The backlog at the current time is also displayed to the analyst-->
+
 
 <html>
     <head>
@@ -93,7 +95,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 Sign Out
                 </a>
-              </li>
+            </li>
           </ul>
           </div>
         </nav>
@@ -118,7 +120,7 @@
                     <h4><u>Backlog:</u> The number of on-going problems</h4>
                     <p id="totalBacklog"></p>
                     
-                    <canvas id="canvas" style="width: 800px; height: 350px"></canvas>
+                    <canvas id="canvas" style="width: 80%; height: 40%"></canvas>
                
                </div>
           </div>
@@ -128,7 +130,7 @@
         var pieChart = new Chart(document.getElementById("canvas"), {
             type: 'pie',
             options: {
-                responsive:false,
+                responsive:true,
                 tooltips: {enabled: false},
                 hover: {mode: null},
                 title: {
@@ -143,7 +145,7 @@
         var backlogChart = new Chart(document.getElementById("canvas"), {
             type: 'line',
                 options: {
-                    responsive:false,
+                    responsive:true,
                     tooltips: {enabled: false},
                     hover: {mode: null},
                     title: {
@@ -171,7 +173,6 @@
 
             //Sets the shown chart to the chosen chart 
             function setChartShown(chosenMetric) {
-
                 $.post("metricsPHP/backlog.php", function(data){    
                 //sets the number of backlogs to what is retrieved from the database
                     console.log(data);
@@ -228,7 +229,7 @@
                         ]
                     },
                     options: {
-                        responsive:false,
+                        responsive:true,
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         title: {
@@ -266,7 +267,7 @@
                             }]
                         },
                         options: {
-                            responsive:false,
+                            responsive:true,
                             tooltips: {enabled: false},
                             hover: {mode: null},
                             title: {

@@ -1,3 +1,10 @@
+<!-- Written by Sam Thompson B619450-->
+<!-- Used to display the equipment data to the analyst-->
+<!-- The analyst can choose a equipment, and data and charts are shown about that piece of equipment-->
+<!-- Data is displayed in both bullet point form -->
+<!-- And in the form of two graphs 1.Comparison of number of current problems 2.Number of prblems/time for the chosen equipment-->
+
+
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -69,7 +76,7 @@
             <li class="nav-item">
               <a class="nav-link" href="Analyst_Spec.php">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                Specialist Analytics
+                Equipment Analytics
               </a>
             </li>
             <li class="nav-item">
@@ -89,7 +96,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 Sign Out
                 </a>
-              </li>
+            </li>
           </ul>
           </div>
         </nav>
@@ -103,7 +110,7 @@
         
           <div class="col-md-12 ml-sm-12">
 
-        <div class="row">
+        
         <div id="ChooseEquip">
             <h4><u>Equipment</u></h4>
             
@@ -120,15 +127,15 @@
 
 
         <div id="EquipmentAnalytics" style="padding-left:20px">
-            <h4><u>Specialist Analytics</u></h4>
+            <h4><u>Equipment Analytics</u></h4>
             <select id="equipmentMetric">
                 <option value="Comparison of Number of Problems">Comparison of Number of Problems</option> 
                 <option value="Number Of Problems / Time">Number Of Problems / Time</option>
             </select>
 
-            <canvas id="canvas" style="width: 400px; height: 300px"></canvas>
+            <canvas id="canvas" style="width: 80%; height: 80%"></canvas>
         </div>
-        </div>
+       
 
 
           <script>
@@ -227,6 +234,7 @@
 
 
             function setMetricData(selectedMetric){
+
                 if(!selectedMetric) selectedMetric = document.getElementById("equipmentMetric").value;
                 //makes sure the selectedMetric is set to something
                 
@@ -418,7 +426,7 @@
                     }
                     return tempArray;
             }
-            
+
             </script>
 
 
