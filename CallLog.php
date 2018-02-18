@@ -1,6 +1,4 @@
-<?php
-require_once 'db.php';
-?>
+
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -73,52 +71,31 @@ require_once 'db.php';
 
                 <table id="example" class="table table-bordered table-hover">        
                     <thead>
-
-
-                        <?php
-                      $query = "SELECT * FROM `TelephoneCall`";
-
-                    $response = @mysqli_query($mysqli, $query);
-
-                    if($response){
-                        echo '
-                        <tr class="thead-dark"><td align="left"><b>Call Number</b></td>
+                      <tr class="thead-dark">
+                        <td align="left"><b>Call Number</b></td>
                         <td align="left"><b>Time of Call</b></td>
                         <td align="left"><b>Name of Caller</b></td>
                         <td align="left"><b>Call Back Reason</b></td>
                         <td align="left"><b>Staff ID</b></td>
-                        <td align="left"><b>Operator Name</b></td></tr>
-                        
+                        <td align="left"><b>Operator Name</b></td>
+                      </tr>
                     </thead>
-                    <tbody>';
+                    <tbody>
+                   <?php
 
-                 while($row = mysqli_fetch_array($response)){
-
-                        echo '<tr><td align="left">' .
-                        
-                        $row['CallNumber'] . '</td><td align="left">' .
-                        $row['TimeOfCall'] . '</td><td align="left">' .
-                        $row['NameOfCaller'] . '</td><td align="left">' .
-                        $row['CallBackReason'] . '</td><td align="left">' .
-                        $row['StaffID'] . '</td><td align="left">' .
-                        $row['OperatorName'] . '</td><td align="left">';
-                        echo '</tr>';
-                        
-                        }
-                        
-  
-                        
-                        } else {
-                     
-                        echo "Couldn't issue database query<br />";
-                        
-                        echo mysqli_error($mysqli);
-                     
-                        }
-                   
-                        mysqli_close($mysqli);
+                    $res = include "metricsPHP/CallLog.php";
+                    $res = (json_decode($res, true));
                     
-                        ?>
+                    foreach($res as $call){
+                      echo "<tr> " . $call["CallNumber"] . "</tr>";
+                      echo "<tr> " . $call["TimeOfCall"] . "</tr>";
+                      echo "<tr> " . $call["NameOfCaller"] . "</tr>";
+                      echo "<tr> " . $call["CallBackReason"] . "</tr>";
+                      echo "<tr> " . $call["StaffID"] . "</tr>";
+                      echo "<tr> " . $call["OperatorName"] . "</tr>";
+                    }
+                
+                    ?>
                     </tbody>
                 </table>
           </div>
