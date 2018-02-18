@@ -49,6 +49,12 @@
                 Call Log
                 </a>
               </li>
+              <li class="nav-item">                
+                <a class="nav-link" href="index.php"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                Sign Out
+                </a>
+              </li>
             </ul>
           </div>
         </nav>
@@ -82,11 +88,8 @@
                         <?php
                             // Reminder to Add their specialisations from the db, SPECID -> SoftwareType
                             // Replace this with call to php page specInfo.php
-                            $res = '[{"SpecilailistID":"1","NumOfProblems":"2","Name":"Jeff Bezos","Age":"42","Types":["Printing"]},{"SpecilailistID":"2","NumOfProblems":"1","Name":"Bill Gates","Age":"62","Types":["Networking"]},{"SpecilailistID":"3","NumOfProblems":"3","Name":"Sergey Bin","Age":"34","Types":["Software"]},{"SpecilailistID":"4","NumOfProblems":"4","Name":"Steve Jobs","Age":"27","Types":["Hardware","Software"]},{"SpecilailistID":"5","NumOfProblems":"2","Name":"Elon Musk","Age":"41","Types":["Hardware","Networking"]}]';
-                            
+                            $res = '[{"SpecilailistID":"1","NumOfProblems":"2","Name":"Jeff Bezos","Age":"42","Types":["Printing"]},{"SpecilailistID":"2","NumOfProblems":"1","Name":"Bill Gates","Age":"62","Types":["Networking"]},{"SpecilailistID":"3","NumOfProblems":"3","Name":"Sergey Bin","Age":"34","Types":["Software"]},{"SpecilailistID":"4","NumOfProblems":"4","Name":"Steve Jobs","Age":"27","Types":["Hardware","Software"]},{"SpecilailistID":"5","NumOfProblems":"2","Name":"Elon Musk","Age":"41","Types":["Hardware","Networking"]}]';                  
                             //
-                            $resSpecTypes = 
-
                             $res = (json_decode($res, true));
 
                             foreach($res as $spec){
