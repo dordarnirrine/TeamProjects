@@ -1,5 +1,6 @@
 <?php
-	$chosenSpecialist = $_POST['chosenSpecialist'];
+	$date = $_POST['date'];
+	$specialist = $_POST['specialist'];
 	
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";
@@ -14,19 +15,21 @@
 
 	$NumOfProblems = $db->get_var("SELECT COUNT(Problem.ProblemNum)
 								   FROM Problem, SpecProb, Specialist
-								   WHERE Specialist.SpecilailistID = SpecProb.SpecialistID
+								   WHERE Problem.StartDate < '$date' 
+								   AND Specialist.SpecilailistID = SpecProb.SpecialistID
 								   AND SpecProb.ProbNum = Problem.ProblemNum
-								   AND Specialist.Name = '$chosenSpecialist' ");
+								   AND Specialist.Name = '$specialist' ");
 
 
 	$NumOfSolutions = $db->get_var("SELECT COUNT(Solution.ProbNum)
 								   FROM Solution, SpecProb, Specialist
-								   WHERE Specialist.SpecilailistID = SpecProb.SpecialistID
+								   WHERE Solution.SolDate <= '$date'
+								   AND Specialist.SpecilailistID = SpecProb.SpecialistID
 								   AND SpecProb.ProbNum = Solution.ProbNum
-								   AND Specialist.Name = '$chosenSpecialist' ");
+								   AND Specialist.Name = '$specialist' ");
 
 
 	$currentProblems = (int)$NumOfProblems - (int)$NumOfSolutions;
 
-	echo $currentProblems;
+	echo $currentProblems.".".$date;
 ?>

@@ -138,29 +138,21 @@
                 
                 var probTimeChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
-                    data: {
-                        labels: [1,2,3,4,5],
-                        datasets: [{ 
-                            data: [12,8,1,6,1],
-                            label: "Equipment",
-                            borderColor: "#3e95cd",
-                            fill: false
-   
+                    options: {
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
+                        title: {
+                        display: true,
+                        text: 'Number Of Current Problems / Time'
                         }
-                        ]           
-                    },
-                            options: {
-                                title: {
-                                display: true,
-                                text: 'Number Of Current Problems / Time'
-                            }
-                        }
+                    }
                 });
 
                 var numOfProbChart = new Chart(document.getElementById("canvas"), {
                             type: 'bar',
-
                             options: {
+                                tooltips: {enabled: false},
+                                hover: {mode: null},
                                 legend: { display: false },
                                 title: {
                                     display: true,
@@ -209,7 +201,7 @@
 
             function setEquipData(chosenEquip) {
                 if(!chosenEquip) chosenEquip = document.getElementById("chosenEquip").value;
-                console.log(chosenEquip);
+                
                 var make = chosenEquip.split("-")[0];
                 var model = chosenEquip.split("-")[1];
 
@@ -231,7 +223,7 @@
 
             function setMetricData(selectedMetric){
                 if(!selectedMetric) selectedMetric = document.getElementById("equipmentMetric").value;
-                if(!chosenEquip) chosenEquip = document.getElementById("chosenEquip").value;
+               
                 
 
                 if (selectedMetric == "Comparison of Number of Problems") {
@@ -248,15 +240,16 @@
                             var model = equip.split("-")[1];
                             $.post("metricsPHP/equipNoOfProbs.php",{make:make,model:model}, function(data){
                                 console.log(data);
-                                if(data<min & data){
+                                if(data<min){
                                     min = data;
                                 }
                                 if(data>max & data){
                                     max = data;
                                 }
-                                $.post("metricsPHP/equipNoOfProbs.php",{make:make, model:model},function(equipChosenProbs){
-                                    equipProbs=equipChosenProbs;
-                                    updateGraph(min,equipProbs,max);
+
+                                var chosenEquip = document.getElementById("chosenEquip").value;
+                                $.post("metricsPHP/equipNoOfProbs.php",{make:chosenEquip.split("-")[0], model:chosenEquip.split("-")[1]},function(equipChosenProbs){
+                                    updateGraph(min,equipChosenProbs,max);
                                 });
                             });
                         }
@@ -270,34 +263,20 @@
                         numOfProbChart.destroy();
                         //draw probTimeChart
 
-                        $.ajax({
-                            type: "POST",
-                            url: "metricsPHP/metricsEZSQL.php",
-                            data: {type: "equipProbTime"},
-                            success: function(data){
-                                console.log(data);
-                                probTimeChart = new Chart(document.getElementById("canvas"), {
-                                    type: 'line',
-                                    data: {
-                                        labels: [1,2,3,4,5],
-                                        datasets: [{ 
-                                            data: [12,8,1,6,1],
-                                            label: "Angel Wallace",
-                                            borderColor: "#3e95cd",
-                                            fill: false
-   
-                                        }
-                                        ]           
-                                    },
-                                    options: {
-                                        title: {
-                                        display: true,
-                                        text: 'Number Of Current Problems / Time'
-                                        }
-                                    }
-                                });    //end of draw numOfProbChart                     
-                            }
-                        }) //end of ajax   
+                        var dataArray = [];
+                        var make = chosenEquip.value.split("-")[0];
+                        var model = chosenEquip.value.split("-")[1];
+                        
+                        for(var k=0; k<6;k++){
+                            var kWeeksAgo = new Date();
+                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
+                            
+                            $.post("metricsPHP/EquipProbsOverTime.php",{date:formatDate(kWeeksAgo),make:make,model:model}, function(data){
+                                
+                                dataArray.push(data);
+                                updateLineChart(dataArray);
+                            });
+                        }  
                     }
                 }
             }
@@ -308,7 +287,7 @@
                 numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
                     data: {
-                        labels: ["Highest","Chosen Equipment","Lowest"],
+                        labels: ["Lowest","Chosen Equipment","Highest"],
                         datasets: [
                         {
                             label: "Total Number of Problems",
@@ -336,6 +315,91 @@
             }
                
 
+
+            function updateLineChart(dataArray){
+                //sort by date
+               
+                dataArray = sortByDate(dataArray);
+                
+                backlogChart = new Chart(document.getElementById("canvas"), {
+                    type: 'line',
+                    data: {
+                        labels: [1,2,3,4,5,6],
+                        datasets: [{ 
+                            data:dataArray,
+                            label: "Backlog",
+                            borderColor: "#3e95cd",
+                            fill: false
+                        },
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Backlog for Chosen Equipment Chart',
+                            responsive: true,
+                        }
+                    }       
+                }); //end of draw backlog chart
+                
+            }
+
+
+
+            function formatDate(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+
+
+            function sortByDate(dataArray){
+                    var tempArray=[];
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray.push(dataArray[i].split("."));
+                    }
+                    for(var x=0; x<dataArray.length-1;x++) {
+                        for(var i=0;i<tempArray.length-1;i++) {
+                            
+                            var day1=tempArray[i][1].split("-")[2];
+                            var month1=tempArray[i][1].split("-")[1];
+                            var year1=tempArray[i][1].split("-")[0];
+                            
+                            var day2=tempArray[i+1][1].split("-")[2];
+                            var month2=tempArray[i+1][1].split("-")[1];
+                            var year2=tempArray[i+1][1].split("-")[0];        
+
+                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+                    
+                            } else if(parseInt(month2)<parseInt(month1) && parseInt(year2)==parseInt(year1)){  
+
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            } else if(parseInt(day2)<parseInt(day1) &&parseInt(year2)==parseInt(year1)&&parseInt(month2)==parseInt(month1) ){
+                                var temp = tempArray[i];
+                                tempArray[i] = tempArray[i+1];
+                                tempArray[i+1] = temp;
+
+                            }
+                        }
+                        
+                    }
+                    for(var i=0; i<dataArray.length;i++){
+                        tempArray[i] = tempArray[i][0];
+
+                    }
+                    return tempArray;
+            }
         </script>
     </body>
 </html> 
