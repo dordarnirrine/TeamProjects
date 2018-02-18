@@ -83,7 +83,7 @@
                     <tbody>
                    <?php
 
-                    $res = include "metricsPHP/getCalls.php";
+                    $res = json_encode(include "metricsPHP/getCalls.php");
                     $res = (json_decode($res, true));
                     
                     foreach($res as $call){
