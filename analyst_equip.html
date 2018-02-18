@@ -240,7 +240,7 @@
                             var model = equip.split("-")[1];
                             $.post("metricsPHP/equipNoOfProbs.php",{make:make,model:model}, function(data){
                                 console.log(data);
-                                if(data<min & data){
+                                if(data<min){
                                     min = data;
                                 }
                                 if(data>max & data){
@@ -272,6 +272,7 @@
                             kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
                             
                             $.post("metricsPHP/EquipProbsOverTime.php",{date:formatDate(kWeeksAgo),make:make,model:model}, function(data){
+                                
                                 dataArray.push(data);
                                 updateLineChart(dataArray);
                             });
@@ -286,7 +287,7 @@
                 numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
                     data: {
-                        labels: ["Highest","Chosen Equipment","Lowest"],
+                        labels: ["Lowest","Chosen Equipment","Highest"],
                         datasets: [
                         {
                             label: "Total Number of Problems",
@@ -335,7 +336,7 @@
                     options: {
                         title: {
                             display: true,
-                            text: 'Backlog Chart',
+                            text: 'Backlog for Chosen Equipment Chart',
                             responsive: true,
                         }
                     }       
