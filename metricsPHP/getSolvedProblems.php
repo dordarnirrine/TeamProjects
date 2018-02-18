@@ -10,6 +10,6 @@
 
     $db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
-	echo json_encode($db->get_results("SELECT * FROM Problem"));
+	echo json_encode($db->get_results("SELECT * FROM `Problem` INNER JOIN Solution ON Solution.ProbNum = Problem.ProblemNum"));
 
 ?>
