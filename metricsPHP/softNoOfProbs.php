@@ -12,11 +12,19 @@
 
 	$db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
-	echo json_encode($db->get_results("SELECT COUNT(*) AS total
+	$probnums = $db->get_var("SELECT COUNT(*) AS total
 										FROM Software, Problem, SoftwareProblem
 										WHERE Software.License = SoftwareProblem.License
 										AND Problem.ProblemNum = SoftwareProblem.ProbNum
-										AND Software.Name = '$chosenSoftware'  "));
+										AND Software.Name = '$chosenSoftware'  ");
+
+	$solNums = $db->get_var("SELECT COUNT(*) AS soluNo
+								FROM Software, SoftwareProblem, Solution 
+								WHERE SoftwareProblem.ProbNum = Solution.ProbNum
+								AND Software.License = SoftwareProblem.License
+								AND Software.Name = '$chosenSoftware'");
+
+	echo (int)$probnums - (int)$solNums;
 ?>
 
 

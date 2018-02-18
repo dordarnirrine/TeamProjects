@@ -16,7 +16,7 @@
 
 	$NumOfProblems = $db->get_var("SELECT COUNT(Problem.ProblemNum)
 								   FROM Problem, SoftwareProblem, Software
-								   WHERE Problem.StartDate <= '$date' 
+								   WHERE Problem.StartDate < '$date' 
 								   AND Software.License = SoftwareProblem.License
 								   AND SoftwareProblem.ProbNum = Problem.ProblemNum
 								   AND Software.Name = '$software'");

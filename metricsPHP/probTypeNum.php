@@ -1,5 +1,4 @@
 <?php
-	
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";
 
@@ -11,9 +10,8 @@
 
 	$db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
-	$NumOfProblems = $db->get_var("SELECT COUNT(*) FROM Problem");
-	$NumOfSolutions = $db->get_var("SELECT COUNT(*) FROM Solution");
-	echo (int)$NumOfProblems - (int)$NumOfSolutions;
-	
+	echo json_encode($db->get_results(" SELECT ProblemType.ProblemType As ProbType, COUNT(Problem.ProblemNum) AS ProbNumCount 
+										FROM `ProblemType`, Problem
+										WHERE Problem.ProbType = ProblemType.ProblemType
+										GROUP BY ProblemType.ProblemType"));
 ?>
-

@@ -15,7 +15,7 @@
 
 	$NumOfProblems = $db->get_var("SELECT COUNT(Problem.ProblemNum)
 								   FROM Problem, SpecProb, Specialist
-								   WHERE Problem.StartDate <= '$date' 
+								   WHERE Problem.StartDate < '$date' 
 								   AND Specialist.SpecilailistID = SpecProb.SpecialistID
 								   AND SpecProb.ProbNum = Problem.ProblemNum
 								   AND Specialist.Name = '$specialist' ");

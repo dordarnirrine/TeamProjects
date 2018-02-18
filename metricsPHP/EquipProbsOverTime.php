@@ -15,10 +15,10 @@
 
 	$db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
-	
+
 	$NumOfProblems = $db->get_var("SELECT COUNT(Problem.ProblemNum)
 								   FROM Problem, EquipmentProblem, Equipment
-								   WHERE Problem.StartDate <= '$date' 
+								   WHERE Problem.StartDate < '$date' 
 								   AND Equipment.SerialNo = EquipmentProblem.SerialNo
 								   AND EquipmentProblem.ProbNum = Problem.ProblemNum
 								   AND Equipment.Make = '$make'
