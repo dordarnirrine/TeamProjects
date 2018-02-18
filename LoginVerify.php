@@ -22,13 +22,13 @@
 
     if(password_verify ( $myPassword , $hash )){//Checks if entered password is the same as the hashed one 
         if($job == "Specialist"){//sends user to correct page once they're logged in
-            header('Location:Spec.html');
+            header('Location:Spec.php');
         }
         else if($job == "Analyst"){
-            header('Location:analyst.html');
+            header('Location:analyst.php');
         }
         else if($job == "HelpDesk"){
-            header('Location:Opp.html');
+            header('Location:Spec.php');
         }
     }
     else {
