@@ -70,7 +70,7 @@
                 </script>
 
                 <table id="example" class="table table-bordered table-hover">        
-                    <thead>
+                    <thead class="thead-dark">
                       <tr class="thead-dark">
                         <td align="left"><b>Call Number</b></td>
                         <td align="left"><b>Time of Call</b></td>
@@ -83,16 +83,21 @@
                     <tbody>
                    <?php
 
-                    $res = json_encode(include "metricsPHP/getCalls.php");
-                    $res = (json_decode($res, true));
-                    
+                    include "metricsPHP/getCalls.php";
+                    $res = ob_get_clean();
+                    $res = json_decode($res, true);
+
+
+
                     foreach($res as $call){
-                      echo "<tr> " . $call["CallNumber"] . "</tr>";
-                      echo "<tr> " . $call["TimeOfCall"] . "</tr>";
-                      echo "<tr> " . $call["NameOfCaller"] . "</tr>";
-                      echo "<tr> " . $call["CallBackReason"] . "</tr>";
-                      echo "<tr> " . $call["StaffID"] . "</tr>";
-                      echo "<tr> " . $call["OperatorName"] . "</tr>";
+                      echo "<tr>";
+                      echo "<td> " . $call["CallNumber"] . "</td>";
+                      echo "<td> " . $call["TimeOfCall"] . "</td>";
+                      echo "<td> " . $call["NameOfCaller"] . "</td>";
+                      echo "<td> " . $call["CallBackReason"] . "</td>";
+                      echo "<td> " . $call["StaffID"] . "</td>";
+                      echo "<td> " . $call["OperatorName"] . "</td>";
+                      echo "</tr>";
                     }
                 
                     ?>
