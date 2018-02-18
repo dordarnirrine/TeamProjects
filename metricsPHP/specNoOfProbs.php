@@ -12,12 +12,21 @@
 
 	$db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
-	echo json_encode($db->get_results("SELECT COUNT(*) AS total
-										FROM Specialist, Problem, SpecProb
-										WHERE Specialist.SpecilailistID = SpecProb.SpecialistID
-										AND Problem.ProblemNum = SpecProb.ProbNum
-										AND Specialist.Name = '$chosenSpecialist' "));
+	$NumOfProblems = $db->get_var("SELECT COUNT(Problem.ProblemNum)
+								   FROM Problem, SpecProb, Specialist
+								   WHERE Specialist.SpecilailistID = SpecProb.SpecialistID
+								   AND SpecProb.ProbNum = Problem.ProblemNum
+								   AND Specialist.Name = '$chosenSpecialist' ");
+
+
+	$NumOfSolutions = $db->get_var("SELECT COUNT(Solution.ProbNum)
+								   FROM Solution, SpecProb, Specialist
+								   WHERE Specialist.SpecilailistID = SpecProb.SpecialistID
+								   AND SpecProb.ProbNum = Solution.ProbNum
+								   AND Specialist.Name = '$chosenSpecialist' ");
+
+
+	$currentProblems = (int)$NumOfProblems - (int)$NumOfSolutions;
+
+	echo $currentProblems;
 ?>
-
-
-

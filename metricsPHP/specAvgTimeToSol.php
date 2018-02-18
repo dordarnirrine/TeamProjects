@@ -12,20 +12,24 @@
 
 	$db = new ezSQL_mysqli($username,$password,$dbName,$host);
 
+	
 	echo json_encode($db->get_results("SELECT AVG(
-									 (SELECT DATEDIFF( (
-										SELECT Solution.SolDate 
-										FROM Solution, Problem, Specialist, SpecProb 
-										WHERE Solution.ProbNum = Problem.ProblemNum 
-										AND SpecProb.ProbNum = Problem.ProblemNum 
-										AND SpecProb.SpecialistID = Specialist.SpecilailistID 
-										AND Specialist.Name = '$chosenSpecialist'), (SELECT Problem.StartDate 
-										FROM Solution, Problem, Specialist, SpecProb 
-										WHERE Solution.ProbNum = Problem.ProblemNum 
-										AND SpecProb.ProbNum = Problem.ProblemNum 
-										AND SpecProb.SpecialistID = Specialist.SpecilailistID 
-										AND Specialist.Name = '$chosenSpecialist') ) AS DateDiff)) 
-										AS AVERAGE"));
+									 	(SELECT DATEDIFF(
+									 		(SELECT Solution.SolDate 
+											 FROM Solution, Problem, Specialist, SpecProb 
+											 WHERE Solution.ProbNum = Problem.ProblemNum 
+											 AND SpecProb.ProbNum = Problem.ProblemNum 
+											 AND SpecProb.SpecialistID = Specialist.SpecilailistID 
+											 AND Specialist.Name = '$chosenSpecialist'), 
+											(SELECT Problem.StartDate 
+											 FROM Solution, Problem, Specialist, SpecProb 
+											 WHERE Solution.ProbNum = Problem.ProblemNum 
+											 AND SpecProb.ProbNum = Problem.ProblemNum 
+											 AND SpecProb.SpecialistID = Specialist.SpecilailistID 
+											 AND Specialist.Name = '$chosenSpecialist')
+										) AS DateDiff)) 
+									   AS AVERAGE"));
+	
 ?>
 
 

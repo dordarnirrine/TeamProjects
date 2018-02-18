@@ -1,4 +1,3 @@
-<!--This file is the login page of the help desk system. It was created by Jon Nuttall and Jordan Irvine -->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -38,14 +37,14 @@
           <div class="col h-25"> </div>
           <div class="col-md-8 ml-sm-auto row align-items-center">
             <div class="wrapper">
-                <form action="LoginVerify.php" method="post" name="LoginForm" class="form-signin"> <!--Sends form data to the login verifying page once the login button is pressed.-->      
+                <form action="" method="post" name="LoginForm" class="form-signin">       
                     <h3 class="form-signin-heading"> <img src="img/logo.png" class="" style="margin-left:55px;width:180px;height:180px;"></h3>
                     <hr><br>
                     
-                    <input type="text" class="form-control" style="width: 300px;" name="Username" placeholder="Username" required="" autofocus="" id="Username" /><!--Box for user to enter username-->
-                    <input type="password" class="form-control" name="Password" placeholder="Password" required="" id="Password"/><!--Box for user to enter password-->     		  
+                    <input type="text" class="form-control" style="width: 300px;" name="Username" placeholder="Username" required="" autofocus="" />
+                    <input type="password" class="form-control" name="Password" placeholder="Password" required=""/>     		  
                     <br>
-                    <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button> <!--Button for user to press to log in--> 			
+                    <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>  			
                 </form>			
             </div>
           </div>
