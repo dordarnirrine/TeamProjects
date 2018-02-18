@@ -87,13 +87,13 @@
                     </thead>
                     <tbody>
                         <?php
-                            // Replace this with call to php page getProblems.php
-                            $res = '[{"ProblemNum":"1","ProbDesc":"Computer has stopped printing to the printer","StartDate":"2018-02-05","StartTime":"09:00:00","ProbType":"Printing"},{"ProblemNum":"2","ProbDesc":"Computer is unable to connect to the internet.","StartDate":"2018-02-02","StartTime":"16:00:00","ProbType":"Networking"},{"ProblemNum":"3","ProbDesc":"Microsoft word is unable to import images into the word document","StartDate":"2018-02-01","StartTime":"08:00:00","ProbType":"Software"},{"ProblemNum":"4","ProbDesc":"Disk drive is stuck and wont eject disk from computer","StartDate":"2018-02-01","StartTime":"10:00:00","ProbType":"Hardware"}]';
+                            ob_start();
+                            include "metricsPHP/getUnsolvedProblems.php";
+                            $unsolvedRes = ob_get_clean();
                             
-                            // getUnSolvedProblems.php
-                            $unsolvedRes = '[{"ProblemNum":"3","ProbDesc":"Microsoft word is unable to import images into the word document","StartDate":"2018-02-01","StartTime":"08:00:00","ProbType":"Software","ProbNum":null,"SolDate":null,"SolTime":null,"SolDesc":null},{"ProblemNum":"4","ProbDesc":"Disk drive is stuck and wont eject disk from computer","StartDate":"2018-02-01","StartTime":"10:00:00","ProbType":"Hardware","ProbNum":null,"SolDate":null,"SolTime":null,"SolDesc":null},{"ProblemNum":"5","ProbDesc":"Printer is has a paper jam","StartDate":"2018-02-08","StartTime":"05:36:14","ProbType":"Printing","ProbNum":null,"SolDate":null,"SolTime":null,"SolDesc":null}]';
-                            // getSolvedProblems.php
-                            $solvedRes = '[{"ProblemNum":"1","ProbDesc":"Computer has stopped printing to the printer","StartDate":"2018-02-05","StartTime":"09:00:00","ProbType":"Printing","ProbNum":"1","SolDate":"2018-02-15","SolTime":"14:00:00","SolDesc":"Turned printer off and on again."},{"ProblemNum":"2","ProbDesc":"Computer is unable to connect to the internet.","StartDate":"2018-02-02","StartTime":"16:00:00","ProbType":"Networking","ProbNum":"2","SolDate":"2018-02-14","SolTime":"15:00:00","SolDesc":"Plugged in ethernet cable."}]';
+                            ob_start();
+                            include "metricsPHP/getSolvedProblems.php";
+                            $solvedRes = ob_get_clean();
 
 
                             // Take into account Assigned Specialists `SpecProb`
