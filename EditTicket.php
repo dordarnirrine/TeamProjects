@@ -76,6 +76,7 @@
 
               
           <form action="EditTicket-Query.php" method="post">
+            <h3> Ticket Details </h3>
             <div class="form-group">
                 <label for="ProblemID">ProblemID:</label>
                 <input type="id" class="form-control is-invalid" id="id" name="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
@@ -84,23 +85,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="CallerName">Caller Name:</label>
-                <input type="callername" class="form-control" id="callername" name="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
-            </div>
-            <div class="form-group">
                 <label for="Description">Description of Problem:</label>
                 <textarea type="desc" class="form-control" id="desc" name="desc"> <?php if(isset($_GET["desc"])){echo $_GET["desc"];}; ?> </textarea>
-            </div>
-            <div class="form-group">
-                <label for="CallbackNum">Callback Number:</label>
-                <input type="callbacknum" class="form-control is-invalid" id="callbacknum" name="callbacknum" value=<?php if(isset($_GET["callbacknum"])){echo $_GET["callbacknum"];}; ?>>
-                <div class="invalid-feedback">
-                  Required, for selecting correct Ticket
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="CallbackReason">Reason for Callback:</label>
-                <input type="callback" class="form-control" id="callback" name="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="AssignedSpec">Assigned Specialist:</label>
@@ -117,10 +103,29 @@
                         }
                     ?>
                 </select>
-            </div>      
+            </div>
+            <br>
+            <h3> Caller Details </h3>  
+            <div class="form-group">
+                <label for="CallbackNum">Callback Number:</label>
+                <input type="callbacknum" class="form-control is-invalid" id="callbacknum" name="callbacknum" value=<?php if(isset($_GET["callbacknum"])){echo $_GET["callbacknum"];}; ?>>
+                <div class="invalid-feedback">
+                  Required, for selecting correct Ticket
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="CallbackReason">Reason for Callback:</label>
+                <input type="callback" class="form-control" id="callback" name="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
+            </div>
+            <div class="form-group">
+                <label for="CallerName">Caller Name:</label>
+                <input type="callername" class="form-control" id="callername" name="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
+            </div>  
+            <br>
+            <h3>Solution </h3>  
             <div class="form-group">
                 <label for="Solution">Solution:</label>
-                <textarea type="solution" class="form-control" name="solution" id="solution"> <?php if(isset($_GET["sol"])){echo $_GET["sol"];}; ?> </textarea>
+                <textarea type="solution" class="form-control" name="solution" id="solution" placeholder="Add text here to mark as solved"><?php if(isset($_GET["sol"])){echo $_GET["sol"];}; ?></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>   
