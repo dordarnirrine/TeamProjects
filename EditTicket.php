@@ -72,7 +72,10 @@
           <form action="EditTicket-Query.php" method="post">
             <div class="form-group">
                 <label for="ProblemID">ProblemID:</label>
-                <input type="id" class="form-control" id="id" name="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
+                <input type="id" class="form-control is-invalid" id="id" name="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
+                <div class="invalid-feedback">
+                  Required, for selecting correct Ticket
+                </div>
             </div>
             <div class="form-group">
                 <label for="CallerName">Caller Name:</label>
@@ -84,7 +87,10 @@
             </div>
             <div class="form-group">
                 <label for="CallbackNum">Callback Number:</label>
-                <input type="callbacknum" class="form-control" id="callbacknum" name="callbacknum" value=<?php if(isset($_GET["callbacknum"])){echo $_GET["callbacknum"];}; ?>>
+                <input type="callbacknum" class="form-control is-invalid" id="callbacknum" name="callbacknum" value=<?php if(isset($_GET["callbacknum"])){echo $_GET["callbacknum"];}; ?>>
+                <div class="invalid-feedback">
+                  Required, for selecting correct Ticket
+                </div>
             </div>
             <div class="form-group">
                 <label for="CallbackReason">Reason for Callback:</label>
