@@ -69,18 +69,18 @@
           <div class="col-md-12 ml-sm-12">
 
               
-          <form action="EditTicket-Query.php">
+          <form action="EditTicket-Query.php" method="post">
             <div class="form-group">
                 <label for="ProblemID">ProblemID:</label>
-                <input type="id" class="form-control" id="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
+                <input type="id" class="form-control" id="id" name="id" value=<?php if(isset($_GET["id"])){echo $_GET["id"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="CallerName">Caller Name:</label>
-                <input type="callername" class="form-control" id="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
+                <input type="callername" class="form-control" id="callername" name="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="Description">Description of Problem:</label>
-                <textarea type="desc" class="form-control" id="desc"> <?php if(isset($_GET["desc"])){echo $_GET["desc"];}; ?> </textarea>
+                <textarea type="desc" class="form-control" id="desc" name="desc"> <?php if(isset($_GET["desc"])){echo $_GET["desc"];}; ?> </textarea>
             </div>
             <div class="form-group">
                 <label for="CallbackNum">Callback Number:</label>
@@ -88,28 +88,11 @@
             </div>
             <div class="form-group">
                 <label for="CallbackReason">Reason for Callback:</label>
-                <input type="callback" class="form-control" id="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
-            </div>
-            <div class="form-group">
-                <label for="ProblemType">Problem Type:</label>
-                <select type="problemtype" class="form-control" id="problemtype" <?php if(isset($_GET["type"])){echo $_GET["type"];}; ?>>
-                    <?php
-                        // getProblemTypes
-                        ob_flush();
-                        ob_start();
-                        include "metricsPHP/getProblemTypes.php";
-                        $res = ob_get_clean();
-                        $res = json_decode($res, true);
-
-                        foreach($res as $type){
-                            echo "<option> " . $type["ProblemType"] . "</option>";
-                        }
-                    ?>
-                </select>
+                <input type="callback" class="form-control" id="callback" name="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
             </div>
             <div class="form-group">
                 <label for="AssignedSpec">Assigned Specialist:</label>
-                <select type="assignedspec" class="form-control" id="assignedspec">
+                <select type="assignedspec" class="form-control" name="spec" id="assignedspec">
                     <?php
                         ob_flush();
                         ob_start();
@@ -125,7 +108,7 @@
             </div>      
             <div class="form-group">
                 <label for="Solution">Solution:</label>
-                <textarea type="solution" class="form-control" id="solution"> <?php if(isset($_GET["sol"])){echo $_GET["sol"];}; ?> </textarea>
+                <textarea type="solution" class="form-control" name="solution" id="solution"> <?php if(isset($_GET["sol"])){echo $_GET["sol"];}; ?> </textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>   
