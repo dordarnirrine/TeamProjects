@@ -25,7 +25,7 @@
             header('Location:Spec.php');
         }
         else if($job == "Analyst"){
-            header('Location:analyst.php');
+            header('Location:Analyst.php');
         }
         else if($job == "HelpDesk"){
             header('Location:Spec.php');
