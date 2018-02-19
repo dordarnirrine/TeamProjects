@@ -102,8 +102,9 @@
 
 
                     foreach($res as $call){
+                      $editString = "EditTicket.php?callbacknum=" . $call["CallNumber"] . "&callback=" . rawurlencode($call["CallBackReason"]) . "&callername=" . rawurlencode($call["NameOfCaller"]);
                       echo "<tr>";
-                      echo "<td> " . $call["CallNumber"] . "</td>";
+                      echo "<td> <a href=" . $editString .">" . $call["CallNumber"] . " </a></td>";
                       echo "<td> " . $call["TimeOfCall"] . "</td>";
                       echo "<td> " . $call["NameOfCaller"] . "</td>";
                       echo "<td> " . $call["CallBackReason"] . "</td>";
