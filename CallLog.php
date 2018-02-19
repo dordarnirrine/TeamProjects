@@ -1,4 +1,7 @@
-
+<!--
+  Created by Luke Thompson
+  Front facing menu for viewing a list of calls required for a callback
+-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -96,12 +99,12 @@
                    <?php
 
                     include "metricsPHP/getCalls.php";
-                    $res = ob_get_clean();
+                    $res = ob_get_clean(); # Clean the buffer after grabbing out input
                     $res = json_decode($res, true);
 
 
 
-                    foreach($res as $call){
+                    foreach($res as $call){ #EditString is used to pass the required data to EditTicket.php
                       $editString = "EditTicket.php?callbacknum=" . $call["CallNumber"] . "&callback=" . rawurlencode($call["CallBackReason"]) . "&callername=" . rawurlencode($call["NameOfCaller"]);
                       echo "<tr>";
                       echo "<td> <a href=" . $editString .">" . $call["CallNumber"] . " </a></td>";

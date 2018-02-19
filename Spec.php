@@ -1,3 +1,7 @@
+<!--
+  Created by Jon Nuttall
+  Front facing menu for viewing a list of all specialists and associated info from the database
+-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -76,7 +80,7 @@
 
                 <script>
                     $(document).ready(function() {
-                        $('#example').DataTable();
+                        $('#example').DataTable(); // Initiates our datatable, to give the appropriate functionallity 
                     } );
                 </script>
 
@@ -94,10 +98,10 @@
                         <?php
 
                             include "metricsPHP/specInfo.php";
-                            $res = ob_get_clean(); 
+                            $res = ob_get_clean(); ## Buffer Cleanup / Data Grab
                             $res = (json_decode($res, true));
 
-                            foreach($res as $spec){
+                            foreach($res as $spec){ # Loop through results and add it to the table
                                 echo "<tr>";
                                 echo "<td> " . $spec["SpecilailistID"] . "</td>";
                                 echo "<td> " . $spec["Name"] . "</td>";

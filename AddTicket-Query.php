@@ -1,4 +1,7 @@
 <?php
+    # Created by Jon Nuttall
+    # Backend for creating a new ticket within the database
+
     $id = $_POST["id"]; # Ticket ID
     $caller = $_POST["caller"]; # Caller Name
     $desc = $_POST["desc"]; # Problem Description

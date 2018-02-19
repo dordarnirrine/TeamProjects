@@ -1,3 +1,8 @@
+<!--
+  Created by Jon Nuttall
+  Front facing menu for editing tickets in the database
+-->
+
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -74,7 +79,9 @@
           <div class="col h-5"> </div>
           <div class="col-md-12 ml-sm-12">
 
-              
+          <!--
+            Each input type has php embedded in their value tag, so they can have data relayed to them, this saves the user from typing in all required data themself    
+          -->
           <form action="EditTicket-Query.php" method="post">
             <h3> Ticket Details </h3>
             <div class="form-group">
@@ -94,7 +101,7 @@
                 <option> None </option>
                     <?php
                         ob_flush();
-                        ob_start();
+                        ob_start(); # Usual buffer cleanup / restart for grabbing our data
                         include "metricsPHP/specInfo.php";
                         $res = ob_get_clean();            
                         $res = (json_decode($res, true));

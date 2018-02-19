@@ -1,3 +1,7 @@
+<!--
+  Created by Luke Thompson / Jon Nuttall
+  Front facing menu for viewing all tickets in the database
+-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -78,21 +82,6 @@
             $(document).ready(function() {
                 $('#example').DataTable();
             } );
-
-            $('#example').bootstrapTable({
-                contextMenu: '#example1-context-menu',
-                onContextMenuItem: function(row, $el){
-                    if($el.data("item") == "edit"){
-                        alert("Edit: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "delete"){
-                        alert("Delete: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "action1"){
-                        alert("Action1: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "action2"){
-                        alert("Action2: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    }
-                }
-            });
           </script>
 
                 <table id="example" class="table table-bordered table-hover">        
@@ -114,15 +103,13 @@
 
                             ob_start();
                             include "metricsPHP/getSolvedProblems.php";
-                            $solvedRes = ob_get_clean();
+                            $solvedRes = ob_get_clean(); # Usual buffer cleanup / data grab
 
 
                             // Take into account Assigned Specialists `SpecProb`
-                            $res = (json_decode($unsolvedRes, true));
+                            $res = (json_decode($unsolvedRes, true));                
 
-                            
-
-                            foreach($res as $spec){
+                            foreach($res as $spec){ # Loop through unsolved tickets and add them to the table
                                 $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"]; 
                                 echo "<tr>";
                                 echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";
@@ -136,7 +123,7 @@
 
                             $res = (json_decode($solvedRes, true));
 
-                            foreach($res as $spec){
+                            foreach($res as $spec){ # Loop through solved tickets, EditStrings are generated for both and added to the first <td>
                                 $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"]; 
                                 echo "<tr>";
                                 echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";

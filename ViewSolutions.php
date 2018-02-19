@@ -1,3 +1,7 @@
+<!--
+  Created by Jon Nuttall
+  Front facing menu for viewing all solved tickets and solutions
+-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -78,20 +82,6 @@
             $(document).ready(function() {
                 $('#example').DataTable();
             } );
-
-            $('#example').bootstrapTable({
-                contextMenu: '#example1-context-menu',
-                onContextMenuItem: function(row, $el){
-                    if($el.data("item") == "edit"){
-                        alert("Edit: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "delete"){
-                        alert("Delete: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "action1"){
-                        alert("Action1: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    } else if($el.data("item") == "action2"){
-                        alert("Action2: " + row.itemid + ' ' + row.name + ' ' + row.price);
-                    }
-                }
             });
           </script>
 
@@ -111,11 +101,11 @@
 
                             ob_start();
                             include "metricsPHP/getSolvedProblems.php";
-                            $solvedRes = ob_get_clean();
+                            $solvedRes = ob_get_clean(); # Usual buffer cleanup / data grab
 
                             $res = (json_decode($solvedRes, true));
 
-                            foreach($res as $spec){
+                            foreach($res as $spec){ # Loop through results, generate a string so data can be passed to EditTicket.php / Add table rows
                                 $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"] . "&sol=" . $spec["SolDesc"]; 
                                 echo "<tr>";
                                 echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";

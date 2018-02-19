@@ -1,3 +1,7 @@
+<!--
+AddTickets.php - Created by Jon Nuttall
+Front facing menus for Adding a new ticket to the database
+-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -100,10 +104,10 @@
                     <select type="problemtype" class="form-control" id="problemtype" name="type">
                         <?php
                             // getProblemTypes
-                            ob_flush();
-                            ob_start();
-                            include "metricsPHP/getProblemTypes.php";
-                            $res = ob_get_clean();
+                            ob_flush(); # As we're using the output buffer to grab data from out api, we clear and flush it to ensure we only get out data
+                            ob_start(); # And then restart the buffer for output again
+                            include "metricsPHP/getProblemTypes.php"; 
+                            $res = ob_get_clean(); # This then grabs the current buffer and clears it
                             $res = json_decode($res, true);
 
                             foreach($res as $type){
@@ -119,7 +123,7 @@
                     <option> None </option>
                         <?php
                             // getProblemTypes
-                            ob_flush();
+                            ob_flush(); # Same as above
                             ob_start();
                             include "metricsPHP/getEquipment.php";
                             $res = ob_get_clean();
@@ -138,7 +142,7 @@
                     <option> None </option>
                         <?php
                             // getProblemTypes
-                            ob_flush();
+                            ob_flush(); # Same as Above
                             ob_start();
                             include "metricsPHP/getSoftware.php";
                             $res = ob_get_clean();
@@ -157,7 +161,7 @@
                         <option> None </option>
                         <?php
                             // specInfo.php
-                            ob_flush();
+                            ob_flush(); # Same as above
                             ob_start();
                             include "metricsPHP/specInfo.php";
                             $res = ob_get_clean();            

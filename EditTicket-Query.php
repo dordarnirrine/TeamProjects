@@ -1,5 +1,7 @@
 <?php
-
+    # Created by Jon Nuttall
+    # Backend for editing tickets within the database
+    
     $id = $_POST["id"]; # Ticket ID
     $caller = $_POST["callername"]; # Caller Name
     $desc = $_POST["desc"]; # Problem Description
