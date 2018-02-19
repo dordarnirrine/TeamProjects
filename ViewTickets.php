@@ -114,9 +114,12 @@
                             // Take into account Assigned Specialists `SpecProb`
                             $res = (json_decode($unsolvedRes, true));
 
+                            
+
                             foreach($res as $spec){
+                                $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"]; 
                                 echo "<tr>";
-                                echo "<td> " . $spec["ProblemNum"] . "</td>";
+                                echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";
                                 echo "<td> " . $spec["ProbDesc"] . "</td>";
                                 echo "<td> " . $spec["StartDate"] . "</td>";
                                 echo "<td> " . $spec["StartTime"] . "</td>";  
@@ -128,8 +131,9 @@
                             $res = (json_decode($solvedRes, true));
 
                             foreach($res as $spec){
+                                $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"]; 
                                 echo "<tr>";
-                                echo "<td> " . $spec["ProblemNum"] . "</td>";
+                                echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";
                                 echo "<td> " . $spec["ProbDesc"] . "</td>";
                                 echo "<td> " . $spec["StartDate"] . "</td>";
                                 echo "<td> " . $spec["StartTime"] . "</td>";  
