@@ -9,55 +9,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-datatable.css" rel="stylesheet"> 
-
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/jquery-latest.js"></script>
         <script src="js/jquery-datatable.js"></script>
         <script src="js/bootstrap.datatable.js"> </script>
         <script src="Chart.min.js"></script>
-        <style>
-            select {
-                margin:10px;
-                
-            }
-
-            option{
-                margin:5px;
-            }
-
-            #ChooseEquip{
-               margin:10px;
-               margin-left:15px;
-                padding:3px;
-                height:450px;
-                width:350px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            #EquipmentAnalytics{
-                margin:10px;
-                padding:3px;
-                height:450px;
-                width:500px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            li{
-                margin:10px;
-                margin-left:30px;
-            }
-        </style>
+        
     </head>
 
     <body onload="setChartShown()">
-    <div class="row">
+    <div class="container-fluid">
         <nav class="col-sm-2 d-none d-md-block bg-dark sidebar h-100">
         <a class="nav-link active" href=""> <h1 class="text-light col-sm"> Make-It All </h1> </a>
           <div class="sidebar-sticky">
@@ -90,7 +51,7 @@
                 Equipment Analytics
               </a>
             </li>
-            <li class="nav-item">                
+        	<li class="nav-item">                
                 <a class="nav-link" href="index.php"> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 Sign Out
@@ -100,7 +61,7 @@
           </div>
         </nav>
 
-        <main role="main" class="col-md-6 ml-sm-auto col-lg-10 pt-3 px-4 bg-light">
+        <main role="main" class="col-md-10 ml-sm-auto col-lg-10 pt-3 px-4 bg-light">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">General Analytics</h1>
             <div class="btn-toolbar mb-2 mb-md-0">

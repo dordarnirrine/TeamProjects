@@ -10,54 +10,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-datatable.css" rel="stylesheet"> 
-
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/jquery-latest.js"></script>
         <script src="js/jquery-datatable.js"></script>
         <script src="js/bootstrap.datatable.js"> </script>
         <script src="Chart.min.js"></script>
-        <style>
-            select {
-                margin:10px;
-            }
-
-            option{
-                margin:5px;
-            }
-
-            #ChooseSoftPanel{
-               margin:10px;
-               margin-left:15px;
-                padding:3px;
-                height:450px;
-                width:350px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-             #SoftwarePanel{
-                margin:10px;
-                padding:3px;
-                height:450px;
-                width:500px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            li{
-                margin:10px;
-                margin-left:30px;
-            }
-        </style>
+        
     </head>
 
     <body onload="setSoftwareData()">
-    <div class="row">
+        <div class="row">
         <nav class="col-sm-2 d-none d-md-block bg-dark sidebar h-100">
         <a class="nav-link active" href=""> <h1 class="text-light col-sm"> Make-It All </h1> </a>
           <div class="sidebar-sticky">
@@ -95,7 +57,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 Sign Out
                 </a>
-            </li>
+              </li>
           </ul>
           </div>
         </nav>
@@ -131,7 +93,8 @@
                                   <option value="Problems / Time">Problems / Time</option>
                               </select>
                               
-                              <canvas id="canvas" style="width: 80%; height: 80%"></canvas>
+                              
+                        <canvas id="canvas" style="width: 80%; height: 40%"></canvas>
           
                           </div>
           
@@ -143,11 +106,11 @@
           </div>
 
           <script>
-                //initalises the probtimechart
-                var probTimeChart = new Chart(document.getElementById("canvas"), {
+            //initalises the probTimeChart
+            //uses chartjs
+               var probTimeChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     options: {
-                        responsive:false,
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         title: {
@@ -157,11 +120,11 @@
                     }
                 });
 
-                //initalises the numofprobchart
+               //initalises the numOfProbChart
+               //uses chartjs
                 var numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
                     options: {
-                        responsive:false,
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         legend: { display: false },
@@ -176,106 +139,108 @@
 
           <script>
            
-          //draws the charts if the analyst choose a different software to view metrics on
           $("#chosenSoftware").change(function() {
+                //if the chosen software changes
+                //then the bulletpoints must be updated, changeSoftwareData()
+                //and the graphs must be updated, setMetricData()
                 changeSoftwareData($(this).find('option:selected').text());
                 setMetricData();
             });
 
 
-          //draws the charts if the analyst chooses a different chart to view the data
             $("#softwareMetric").change(function() {
+                //If the chosen graph is changed
+                //then the chart shown need to be changed, setMetricData() does this
                 setMetricData($(this).find('option:selected').text())
             });
 
 
-            //runs this function on load
+            //on load
             function setSoftwareData() {
-                //gets each piece of software
-                //adds it to the option tag
                 $.post("metricsPHP/softInfo.php", function(data){
+                    //adds all the specialists to the drop down menu
                     data = JSON.parse(data);
                     for(var i=0; i<data.length; i++){
                         $("#chosenSoftware").append("<option>"+data[i].Name+"</option>");
                     }
-                        
-                    //makes sure the bullet points are changed to the chosen software
-                    //the chosen software is initalised to data[0]
+                    //changes the software data (bulletpoints)
                     changeSoftwareData(data[0].Name);
                 });
             }
 
 
-
             function changeSoftwareData(chosenSoftware){
+                //this function changes which data is displayed to the analyst via the bulletpoints
                 if(!chosenSoftware) chosenSoftware = document.getElementById("chosenSoftware").value;
-                //makes sure the chosenSoftware is changed to what is currently chosen
                 $.post("metricsPHP/changeSoftData.php",{chosenSoftware:chosenSoftware},function(data){
-                    //gets all the data about the chosen piece of software
+                    //this data object below contains data about the chosen software
                     data = JSON.parse(data);
                     
-                    //sets the webpage to show the data about the chosen piece of software
                     $("#softName").html("Software: <strong>"+data[0].Name+"</strong>");
                     $("#softType").html("Type: <strong>"+data[0].Type+"</strong>");
                     $("#numOfStaff").html("Num of Staff Using <strong>"+data[0].NoOfStaffUsing+"</strong>");
                 });
                 
-                //gets the number of current problems of the choseb software
                 $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(data){
+                    //gets the number of current problems associated with the chosen software and outputs it
                     $("#numOfCurrentProbs").html("Number Of Problems: <strong>"+data+"</strong>")
                 });
+                //redraws graphs
                 setMetricData();
             }
 
 
-
             function setMetricData(selectedMetric){
                 if(!selectedMetric) selectedMetric = document.getElementById("softwareMetric").value;
+                //makes sure the selectedMetric is set to something
                 var chosenSoftware = document.getElementById("chosenSoftware").value;
-                
+                //gets the chosen software 
+
                 if (selectedMetric == "Comparison of Number of Problems") {
+                    //if the above condition is true, the numOfProbs chart should be drawn
                     if(probTimeChart) {
                         probTimeChart.destroy();
-                        var softProbs;  //the number of problems that the chosen piece of software has
+                        var softProbs;
                         var max=0;
                         var min=Math.pow(10,1000);  //essentially infinite
-                        var softList = document.getElementById('chosenSoftware');   //gets the list of software
+                        var softList = document.getElementById('chosenSoftware');   //gets the list of software 
 
-                        for(var k=0; k<softList.length;k++){    //goes through every piecce of software
+                        for(var k=0; k<softList.length;k++){
                             var soft = softList[k].value;
+                            //goes through every piece of software on the database
                             $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:soft}, function(data){
-                                //gets the number of problems for every piece of software
-                                if(data<min){
+                                //gets the number of problems associated with each piece of software
+
+                                if(data<min){   //gets the min value for num of problems
                                     min=data;
                                 }
 
-                                if(data>max&data){
+                                if(data>max&data){  //gets the max value for num of problems
                                     max=data;
                                 }
                                
-
                                 $.post("metricsPHP/softNoOfProbs.php",{chosenSoftware:chosenSoftware},function(probSoft){
-                                    updateGraph(min,probSoft,max); // draws graph with correct data
+                                    //draws the graph based on the max, min and num of probs for the chosen software
+                                    updateGraph(min,probSoft,max);
                                 })
                             })
                         }
 
                     }
+
                 } else {
 
                     if(numOfProbChart){
                         numOfProbChart.destroy();
+                        //draw probTimeChart
                         var dataArray = [];
 
                         for(var k=0; k<6;k++){
                             var kWeeksAgo = new Date();
-                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7));
-                            //goes through 6 weeks, starting at current date
+                            kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7)); //get the date for the past 6 weeks, from today
 
                             $.post("metricsPHP/softProbsOverTime.php",{date:formatDate(kWeeksAgo),software:chosenSoftware}, function(data){
-                                //gets the number of problems for each week
                                 dataArray.push(data);
-                                //draws graph with data
                                 updateLineChart(dataArray);
                             });
                         }
@@ -284,11 +249,7 @@
             }
 
 
-
-
             function updateGraph(min, soft, max){
-                //draws graph with data from database
-                //standard chartJS code
                 numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
                     data: {
@@ -302,7 +263,6 @@
                         ]
                     },
                     options: {
-                        responsive:false,
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         scales:{
@@ -324,11 +284,8 @@
         
 
 
-
             function updateLineChart(dataArray){
                 dataArray = sortByDate(dataArray);
-                //makes sure data is sorted by the date
-                //draws graph with data, chartJS
                 backlogChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     data: {
@@ -342,7 +299,6 @@
                         ]
                     },
                     options: {
-                        responsive:false,
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         title: {
@@ -356,11 +312,7 @@
             }
 
 
-
-
             function formatDate(date) {
-                //makes sure the date is formatted correctly
-                // yyyy/mm/dd
                 var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
                 day = '' + d.getDate(),
@@ -372,11 +324,7 @@
 
 
 
-
-
            function sortByDate(dataArray){
-                //bubble sort to make sure that the array is sorted by the date
-                //needs to be sorted to draw the graph
                     var tempArray=[];
                     for(var i=0; i<dataArray.length;i++){
                         tempArray.push(dataArray[i].split("."));

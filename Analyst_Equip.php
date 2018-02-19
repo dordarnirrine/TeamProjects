@@ -10,51 +10,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-datatable.css" rel="stylesheet"> 
-
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/jquery-latest.js"></script>
         <script src="js/jquery-datatable.js"></script>
         <script src="js/bootstrap.datatable.js"> </script>
         <script src="Chart.min.js"></script>
-        <style>
-        select {
-                margin:10px;
-                
-            }
-
-            option{
-                margin:5px;
-            }
-
-            #ChooseEquip{
-               margin:10px;
-               margin-left:15px;
-                padding:3px;
-                height:450px;
-                width:350px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            #EquipmentAnalytics{
-                margin:10px;
-                padding:3px;
-                height:450px;
-                width:500px;
-                border:solid;
-                border-width: 1px;
-                border-radius:3px;
-                display: inline-block;
-                float:left;
-            }
-
-            li{
-                margin:10px;
-                margin-left:30px;
-            }
-        </style>
+        
     </head>
 
     <body onload="setEquipToChoose()">
@@ -76,7 +37,7 @@
             <li class="nav-item">
               <a class="nav-link" href="Analyst_Spec.php">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                Equipment Analytics
+                Specialist Analytics
               </a>
             </li>
             <li class="nav-item">
@@ -96,12 +57,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 Sign Out
                 </a>
-            </li>
+              </li>
           </ul>
           </div>
         </nav>
 
-        <main role="main" class="col-md-6 ml-sm-auto col-lg-10 pt-3 px-4 bg-light">
+        <main role="main" class="col-md-10 ml-sm-auto col-lg-10 pt-3 px-4 bg-light">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">Equipment Analytics</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
@@ -133,7 +94,7 @@
                 <option value="Number Of Problems / Time">Number Of Problems / Time</option>
             </select>
 
-            <canvas id="canvas" style="width: 80%; height: 80%"></canvas>
+            <canvas id="canvas" style="width: 80%; height: 40%"></canvas>
         </div>
        
 
@@ -144,7 +105,7 @@
          var probTimeChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     options: {
-                        responsive:false,
+
                         tooltips: {enabled: false},
                         hover: {mode: null},
                         title: {
@@ -158,7 +119,7 @@
                 var numOfProbChart = new Chart(document.getElementById("canvas"), {
                             type: 'bar',
                             options: {
-                                responsive:false,
+        
                                 tooltips: {enabled: false},
                                 hover: {mode: null},
                                 legend: { display: false },
@@ -257,7 +218,7 @@
                             //extracts the make and model of every equipment
                             $.post("metricsPHP/equipNoOfProbs.php",{make:make,model:model}, function(data){
                                 console.log(data);
-                                if(data<min){   //gets the minimum piece of data
+                                if(data<min & data){   //gets the minimum piece of data
                                     min = data;
                                 }
                                 if(data>max & data){    //gets the max piece of data
@@ -268,7 +229,7 @@
                                 $.post("metricsPHP/equipNoOfProbs.php",{make:chosenEquip.split("-")[0], model:chosenEquip.split("-")[1]},function(equipChosenProbs){
                                     //get the number of problems for the currently chosen equipment
                                     //calls updateGraph to draw the graph with the data from the database
-                                    updateGraph(min,equipChosenProbs,max);
+                                    updateGraph(min,max,equipChosenProbs);
                                 });
                             });
                         }
@@ -318,7 +279,7 @@
                         ]
                     },
                     options: {
-                        responsive:false,
+
                         scales:{
                             yAxes:[{
                                 ticks:{
@@ -356,7 +317,7 @@
                         ]
                     },
                     options: {
-                        responsive:false,
+
                         title: {
                             display: true,
                             text: 'Backlog for Chosen Equipment Chart',
