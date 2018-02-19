@@ -91,6 +91,7 @@
             <div class="form-group">
                 <label for="AssignedSpec">Assigned Specialist:</label>
                 <select type="assignedspec" class="form-control" name="spec" id="assignedspec">
+                <option> None </option>
                     <?php
                         ob_flush();
                         ob_start();
@@ -115,11 +116,11 @@
             </div>
             <div class="form-group">
                 <label for="CallbackReason">Reason for Callback:</label>
-                <input type="callback" class="form-control" id="callback" name="callback" value=<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>>
+                <input type="callback" class="form-control" id="callback" name="callback" value='<?php if(isset($_GET["callback"])){echo $_GET["callback"];}; ?>'>
             </div>
             <div class="form-group">
                 <label for="CallerName">Caller Name:</label>
-                <input type="callername" class="form-control" id="callername" name="callername" value=<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>>
+                <input type="callername" class="form-control" id="callername" name="callername" value='<?php if(isset($_GET["callername"])){echo $_GET["callername"];}; ?>'>
             </div>  
             <br>
             <h3>Solution </h3>  
