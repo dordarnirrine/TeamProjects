@@ -1,5 +1,5 @@
 <!--
-  Created by Luke Thompson / Jon Nuttall
+  Created by Luke Tolley / Jon Nuttall
   Front facing menu for viewing all tickets in the database
 -->
 <html>
