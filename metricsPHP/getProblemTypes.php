@@ -1,5 +1,6 @@
 <?php
-	
+	# Created by Jon Nuttall
+	# Returns a list of all Problem Types in JSON Form
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";
 
