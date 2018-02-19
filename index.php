@@ -1,8 +1,10 @@
-<!--This file is the login page of the help desk system. It was created by Jon Nuttall and Jordan Irvine -->
+<!--This file is the login page of the help desk system. It was created by Jon Nuttall, Jordan Irvine and Henry Cornelius -->
+<!DOCTYPE HTML SYSTEM>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+    	<title>Helpdesk Login.</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link href="css/bootstrap.min.css" rel="stylesheet"/>
     </head>
 
     <body>
@@ -41,9 +43,10 @@
                 <form action="LoginVerify.php" method="post" name="LoginForm" class="form-signin"> <!--Sends form data to the login verifying page once the login button is pressed.-->      
                     <h3 class="form-signin-heading"> <img src="img/logo.png" class="" style="margin-left:55px;width:180px;height:180px;"></h3>
                     <hr><br>
-                    
-                    <input type="text" class="form-control" style="width: 300px;" name="Username" placeholder="Username" required="" autofocus="" id="Username" /><!--Box for user to enter username-->
-                    <input type="password" class="form-control" name="Password" placeholder="Password" required="" id="Password"/><!--Box for user to enter password-->     		  
+                    <label for="Username">Username</label>
+                    <input type="text" class="form-control" style="width: 300px;" name="Username" placeholder="Username" required="" autofocus="" id="Username" value="Username" /><!--Box for user to enter username-->
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" name="Password" placeholder="Password" required="" id="Password" value=""/><!--Box for user to enter password-->     		  
                     <br>
                     <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button> <!--Button for user to press to log in--> 			
                 </form>			
