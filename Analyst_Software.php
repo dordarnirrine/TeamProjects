@@ -240,8 +240,8 @@
                             kWeeksAgo.setDate(kWeeksAgo.getDate() - (k*7)); //get the date for the past 6 weeks, from today
 
                             $.post("metricsPHP/softProbsOverTime.php",{date:formatDate(kWeeksAgo),software:chosenSoftware}, function(data){
-                                dataArray.push(data);
-                                updateLineChart(dataArray);
+                                dataArray.push(data);   //add the data to an array
+                                updateLineChart(dataArray);   // draw the line chart using the retrieved data
                             });
                         }
                     }
@@ -250,6 +250,8 @@
 
 
             function updateGraph(min, soft, max){
+                //draws the bar chart, with the data passed to the function
+                //standard chart js syntax
                 numOfProbChart = new Chart(document.getElementById("canvas"), {
                     type: 'bar',
                     data: {
@@ -285,7 +287,9 @@
 
 
             function updateLineChart(dataArray){
-                dataArray = sortByDate(dataArray);
+                //draws the line chart with the data passed to the function
+                //standard chartjs syntax
+                dataArray = sortByDate(dataArray);  //data must be order by date to be drawn correctly
                 backlogChart = new Chart(document.getElementById("canvas"), {
                     type: 'line',
                     data: {
@@ -313,6 +317,7 @@
 
 
             function formatDate(date) {
+                //formats the date to yyyy/mm/dd
                 var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
                 day = '' + d.getDate(),
@@ -325,6 +330,8 @@
 
 
            function sortByDate(dataArray){
+                    //sorts the dataArray by date
+                    //uses bubble sort 
                     var tempArray=[];
                     for(var i=0; i<dataArray.length;i++){
                         tempArray.push(dataArray[i].split("."));
@@ -332,15 +339,19 @@
                     for(var x=0; x<dataArray.length-1;x++) {
                         for(var i=0;i<tempArray.length-1;i++) {
                             
+                            //gets the day, month and year from the date for tempArray[i]                            
                             var day1=tempArray[i][1].split("-")[2];
                             var month1=tempArray[i][1].split("-")[1];
                             var year1=tempArray[i][1].split("-")[0];
-                            
+
+
+                            //gets the day, month and year from the date for tempArray[i+1]
                             var day2=tempArray[i+1][1].split("-")[2];
                             var month2=tempArray[i+1][1].split("-")[1];
                             var year2=tempArray[i+1][1].split("-")[0];        
 
-                            if(parseInt(year2)<parseInt(year1)){    //dd/mm/2016 < dd/mm/2017
+                            //the below cases check whether they need to be swapped
+                            if(parseInt(year2)<parseInt(year1)){    // E.G dd/mm/2016 < dd/mm/2017
                                 var temp = tempArray[i];
                                 tempArray[i] = tempArray[i+1];
                                 tempArray[i+1] = temp;
@@ -361,9 +372,11 @@
                         
                     }
                     for(var i=0; i<dataArray.length;i++){
+                        //extracts just the data, removing the dates from the array
                         tempArray[i] = tempArray[i][0];
 
                     }
+                    //returns data in order for graph to be drawn
                     return tempArray;
             }
 
