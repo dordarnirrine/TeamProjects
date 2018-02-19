@@ -1,7 +1,4 @@
 <?php
-
-    var_dump($_POST);
-
     $id = $_POST["id"]; # Ticket ID
     $caller = $_POST["caller"]; # Caller Name
     $desc = $_POST["desc"]; # Problem Description
@@ -58,6 +55,6 @@
         $db->query("INSERT INTO `SpecProb` (SpecialistID, ProbNum) VALUES ('" . substr($spec, 1, 1) . "', '" . $id . "')");
     }
 
-
+    Header("Location: ViewTickets.php")
     // Then redirect to View Tickets
 ?>
