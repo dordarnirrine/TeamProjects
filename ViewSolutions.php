@@ -116,7 +116,7 @@
                             $res = (json_decode($solvedRes, true));
 
                             foreach($res as $spec){
-                                $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"]; 
+                                $editString = "EditTicket.php?id=" . $spec["ProblemNum"] . "&desc=" . $spec["ProbDesc"] . "&type=" . $spec["ProbType"] . "&sol=" . $spec["SolDesc"]; 
                                 echo "<tr>";
                                 echo "<td> <a href='" . $editString . "'>" . $spec["ProblemNum"] . " </a></td>";
                                 echo "<td> " . $spec["ProbDesc"] . "</td>";
