@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the problem type associated with the chosen specialist, along with everything rom the specialist table
 	$chosenSpecialist = $_POST['chosenSpecialist'];
 	
 	include_once "ezSQL-master/shared/ez_sql_core.php";

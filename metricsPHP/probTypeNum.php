@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems associated with each problem type
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";
 

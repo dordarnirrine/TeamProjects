@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems associated with the chosen piece of software before the given data
 	$date = $_POST['date'];
 	$software = $_POST['software'];
 	

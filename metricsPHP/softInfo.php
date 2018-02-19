@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";
 

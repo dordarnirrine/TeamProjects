@@ -1,4 +1,7 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems for the chosen piece of equipment before the date passed to php
+
 	$date = $_POST['date'];
 	$make = $_POST['make'];
 	$model = $_POST['model'];

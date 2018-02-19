@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems the chosen specialist is working on before the date passed to php
 	$date = $_POST['date'];
 	$specialist = $_POST['specialist'];
 	
@@ -28,6 +30,7 @@
 								   AND SpecProb.ProbNum = Solution.ProbNum
 								   AND Specialist.Name = '$specialist' ");
 
+	//var_dump($NumOfProblems."-".$NumOfSolutions);
 
 	$currentProblems = (int)$NumOfProblems - (int)$NumOfSolutions;
 

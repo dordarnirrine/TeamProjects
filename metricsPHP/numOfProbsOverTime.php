@@ -1,6 +1,8 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems at the date passed to it
+
 	$date = $_POST['date'];
-	//echo $date;
 	
 	include_once "ezSQL-master/shared/ez_sql_core.php";
 	include_once "ezSQL-master/mysqli/ez_sql_mysqli.php";

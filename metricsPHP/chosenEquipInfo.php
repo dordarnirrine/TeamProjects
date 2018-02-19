@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets all the data from the equipment table for the chosen piece of equipment
 	$make = $_POST['make'];
 	$model = $_POST['model'];
 	

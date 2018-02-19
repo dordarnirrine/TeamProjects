@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems the chosen specialist is currently working on
 	$chosenSpecialist = $_POST['chosenSpecialist'];
 	
 	include_once "ezSQL-master/shared/ez_sql_core.php";

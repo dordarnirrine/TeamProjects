@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the current number of problems for the piece of equipment chosen by the analyst
 	$Make = $_POST['make'];
 	$Model = $_POST['model'];
 

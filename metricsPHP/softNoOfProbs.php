@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//Gets the number of problems associated with the piece of software chosen by the specialist
 	$chosenSoftware = $_POST['chosenSoftware'];
 
 	include_once "ezSQL-master/shared/ez_sql_core.php";

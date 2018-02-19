@@ -1,4 +1,6 @@
 <?php
+	//Written by Sam Thompson
+	//fetches the data corresponding to the chosen software
 	$chosenSoftware = $_POST['chosenSoftware'];
 	
 	include_once "ezSQL-master/shared/ez_sql_core.php";
